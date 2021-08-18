@@ -3,7 +3,7 @@
 # Environment: Java
 # Minimum Panel Version: 0.6.0
 # ---------------------------------
-FROM openjdk:16-jdk-alpine
+FROM --platform=$BUILDPLATFORM adoptopenjdk/openjdk16:alpine-jre
 
 MAINTAINER Pterodactyl Software, <support@pterodactyl.io>
 
