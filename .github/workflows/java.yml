@@ -7,6 +7,8 @@ on:
       - master
     paths:
       - java/**
+  workflow_dispatch:
+
 jobs:
   push:
     name: "yolks:java_${{ matrix.tag }}"
