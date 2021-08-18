@@ -1,6 +1,20 @@
-FROM        --platform=$BUILDPLATFORM ghcr.io/pterodactyl/yolks:java_16
+# ----------------------------------
+# Pterodactyl Core Dockerfile
+# Environment: Java
+# Minimum Panel Version: 0.6.0
+# ----------------------------------
+FROM openjdk:16-jdk-alpine
 
-RUN         apk add --update --no-cache ansible
+MAINTAINER Pterodactyl Software, <support@pterodactyl.io>
 
-COPY        ./../entrypoint.sh /entrypoint.sh
-CMD         [ "/bin/ash", "/entrypoint.sh" ]
+RUN apk add --no-cache --update curl ca-certificates openssl git tar bash sqlite fontconfig ansible \
+    && adduser --disabled-password --home /home/container container
+
+USER container
+ENV  USER=container HOME=/home/container
+
+WORKDIR /home/container
+
+COPY ./entrypoint.sh /entrypoint.sh
+
+CMD ["/bin/bash", "/entrypoint.sh"]
