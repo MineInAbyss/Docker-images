@@ -1,8 +1,8 @@
-# ---------------------------------
+# ----------------------------------
 # Pterodactyl Core Dockerfile
 # Environment: Java
 # Minimum Panel Version: 0.6.0
-# ---------------------------------
+# ----------------------------------
 FROM --platform=$BUILDPLATFORM adoptopenjdk/openjdk16:alpine-jre
 
 MAINTAINER Pterodactyl Software, <support@pterodactyl.io>
