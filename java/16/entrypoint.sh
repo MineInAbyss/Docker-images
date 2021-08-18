@@ -37,7 +37,7 @@ printf "\033[1m\033[33mcontainer@pterodactyl~ \033[0mjava -version\n"
 java -version
 
 # Run our custom script
-/opt/mineinabyss-config/update-configs.sh
+/opt/mineinabyss-configs/update-configs.sh
 
 # Convert all of the "{{VARIABLE}}" parts of the command into the expected shell
 # variable format of "${VARIABLE}" before evaluating the string and automatically
