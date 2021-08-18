@@ -36,4 +36,4 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            mineinabyss/docker:java_${{ matrix.tag }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/yolks:java_${{ matrix.tag }}
