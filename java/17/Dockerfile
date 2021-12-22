@@ -7,8 +7,9 @@ FROM --platform=$BUILDPLATFORM openjdk:17-slim
 
 MAINTAINER DevScyu, <scyu@scyu.dev>
 
-RUN apk add --no-cache --update curl ca-certificates openssl git tar bash sqlite fontconfig ansible \
-    && adduser --disabled-password --home /home/container container
+RUN apt-get update -y \
+ && apt-get install -y curl ca-certificates openssl git tar sqlite3 fontconfig tzdata iproute2 ansible \
+ && useradd -d /home/container -m container
 
 USER container
 ENV  USER=container HOME=/home/container
