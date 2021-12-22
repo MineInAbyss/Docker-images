@@ -5,7 +5,7 @@
 # ----------------------------------
 FROM --platform=$BUILDPLATFORM adoptopenjdk/openjdk11:alpine-jre
 
-MAINTAINER Pterodactyl Software, <support@pterodactyl.io>
+MAINTAINER DevScyu, <scyu@scyu.dev>
 
 RUN apk add --no-cache --update curl ca-certificates openssl git tar bash sqlite fontconfig ansible \
     && adduser --disabled-password --home /home/container container

@@ -3,7 +3,7 @@
 # Environment: Java
 # Minimum Panel Version: 0.6.0
 # ----------------------------------
-FROM --platform=$BUILDPLATFORM adoptopenjdk/openjdk16:alpine-jre
+FROM --platform=$BUILDPLATFORM openjdk:17-slim
 
 MAINTAINER DevScyu, <scyu@scyu.dev>
 
