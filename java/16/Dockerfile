@@ -7,7 +7,7 @@ FROM --platform=$BUILDPLATFORM adoptopenjdk/openjdk16:alpine-jre
 
 MAINTAINER DevScyu, <scyu@scyu.dev>
 
-RUN apk add --no-cache --update curl ca-certificates openssl git tar bash sqlite fontconfig ansible \
+RUN apk add --no-cache --update curl ca-certificates openssl git tar bash sqlite fontconfig ansible rsync \
     && adduser --disabled-password --home /home/container container
 
 USER container

@@ -8,7 +8,7 @@ FROM --platform=$BUILDPLATFORM openjdk:17-slim
 MAINTAINER DevScyu, <scyu@scyu.dev>
 
 RUN apt-get update -y \
- && apt-get install -y curl ca-certificates openssl git tar sqlite3 fontconfig tzdata iproute2 ansible \
+ && apt-get install -y curl ca-certificates openssl git tar sqlite3 fontconfig tzdata iproute2 ansible rsync \
  && useradd -d /home/container -m container
 
 USER container
