@@ -36,8 +36,17 @@ cd /home/container || exit 1
 printf "\033[1m\033[33mcontainer@pterodactyl~ \033[0mjava -version\n"
 java -version
 
+definedBranch=$(cat config-branch 2>/dev/null)
+
+# wget update-configs.sh from our desired branch (if we ever update it, we wget now instead of having to run ansible-pull twice)
+wget -q "https://raw.githubusercontent.com/MineInAbyss/server-config/${definedBranch:=master}/update-configs.sh" -O update-configs.sh
+# If wget errors (likely because branch doesn't exist), wget from master
+if [ $? -ne 0 ]; then
+    wget -q "https://raw.githubusercontent.com/MineInAbyss/server-config/master/update-configs.sh" -O update-configs.sh
+fi
+
 # Run our custom script
-/opt/mineinabyss-configs/update-configs.sh
+update-configs.sh
 
 # Convert all of the "{{VARIABLE}}" parts of the command into the expected shell
 # variable format of "${VARIABLE}" before evaluating the string and automatically
