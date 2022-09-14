@@ -41,6 +41,18 @@ definedBranch=$(cat config-branch 2>/dev/null)
 # wget and run update-configs.sh from our desired branch (if we ever update it, we wget now instead of having to run ansible-pull twice)
 wget -O - "https://raw.githubusercontent.com/MineInAbyss/server-config/${definedBranch:=master}/update-configs.sh" | sh
 
+# If file named secrets-backup exists
+if [ -f "secrets-backup" ]; then
+  # Loads any secrets from a file as environment variables
+  source /home/container/secrets-backup
+
+  # Create restic backup
+  restic backup ${BACKUP_PATHS}
+
+  # Keeps all snapshots made within last day, daily for the last week, weekly for the last month, monthly for the last year, and yearly for the last 75 years
+  restic forget --keep-within 1d --keep-within-daily 7d --keep-within-weekly 1m --keep-within-monthly 1y --keep-within-yearly 75y
+fi
+
 # Convert all of the "{{VARIABLE}}" parts of the command into the expected shell
 # variable format of "${VARIABLE}" before evaluating the string and automatically
 # replacing the values.
