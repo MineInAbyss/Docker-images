@@ -46,8 +46,8 @@ if [ -f "secrets-backup" ]; then
   # Get the last restic snapshot date in json format
   latestTime=$(restic snapshots --json --latest 1 | jq -r '.[0]["time"]')
 
-  # Check if it has been more than 6 hours since the last backup
-  if [ "$(date -d "$latestTime" +%s)" -lt "$(date -d "6 hours ago" +%s)" ]; then
+  # Check if it has been more than 30 hours since the last backup
+  if [ "$(date -d "$latestTime" +%s)" -lt "$(date -d "30 hours ago" +%s)" ]; then
     # Loads any secrets from a file as environment variables
     source /home/container/secrets-backup
 
