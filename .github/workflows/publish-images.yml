@@ -16,7 +16,7 @@ env:
 
 jobs:
   push:
-    name: "Docker push for dev and prod"
+    name: "Docker push for ${{ matrix.image }}"
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -24,18 +24,21 @@ jobs:
     strategy:
       matrix:
         include:
-          - image: papermc-dev
+          - image: papermc_dev
             path: ./development
-          - image: papermc-prod
+            platforms: linux/amd64,linux/arm64
+          - image: papermc_prod
             path: ./production
+            platforms: linux/amd64
     steps:
       - uses: actions/checkout@v3
 
-      - name: Extra setup to support multiple platforms
-        uses: docker/setup-qemu-action@v1
-      - uses: docker/setup-buildx-action@v1
+      - name: Set up QEMU for multi-platform support
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
         with:
-          version: "v0.5.1"
           buildkitd-flags: --debug
 
       - name: Log in to the Container registry
@@ -49,14 +52,14 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ${{ env.REGISTRY }}/${{ matrix.image }}
+          images: ${{ env.REGISTRY }}/mineinabyss/${{ matrix.image }}
 
       - name: Build and push ${{ matrix.image }}
         uses: docker/build-push-action@v3
         with:
           context: ${{ matrix.path }}
           file: ${{ matrix.path }}/Dockerfile
-          platforms: linux/amd64,linux/arm64
+          platforms: ${{ matrix.platforms }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}

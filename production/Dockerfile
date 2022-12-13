@@ -3,7 +3,7 @@
 # Environment: Java
 # Minimum Panel Version: 0.6.0
 # ----------------------------------
-FROM --platform=$BUILDPLATFORM openjdk:17-slim
+FROM openjdk:17-slim
 
 LABEL org.opencontainers.image.authors="DevScyu <scyu@scyu.dev>, Offz <offz@mineinabyss.com>"
 
