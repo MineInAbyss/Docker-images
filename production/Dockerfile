@@ -5,7 +5,7 @@
 # ----------------------------------
 FROM --platform=$BUILDPLATFORM openjdk:17-slim
 
-MAINTAINER DevScyu, <scyu@scyu.dev>
+LABEL org.opencontainers.image.authors="DevScyu <scyu@scyu.dev>, Offz <offz@mineinabyss.com>"
 
 RUN apt-get update -y \
  && apt-get install -y curl ca-certificates openssl git tar sqlite3 fontconfig tzdata iproute2 ansible rsync wget restic jq \
@@ -16,6 +16,6 @@ ENV  USER=container HOME=/home/container
 
 WORKDIR /home/container
 
-COPY ./../entrypoint.sh /entrypoint.sh
+COPY ./entrypoint.sh /entrypoint.sh
 
 CMD ["/bin/bash", "/entrypoint.sh"]
