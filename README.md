@@ -1,9 +1,9 @@
 <div align="center">
 
-# Docker
+# Mine in Abyss Docker Images
 </div>
 
-Docker containers for our production and development servers. Notably, we use [Keepup](https://github.com/MineInAbyss/Keepup/) to manage plugin versions and Ansible to help with our [server-configs](https://github.com/MineInAbyss/server-config).
+Docker containers for our production and development servers. Notably, we use [Keepup](https://github.com/MineInAbyss/Keepup/) to manage plugin versions and Ansible to help with our [server configs](https://github.com/MineInAbyss/server-config).
 
 # Images
 
@@ -16,7 +16,7 @@ environment:
   KEEPUP: enabled # whether to run keepup at all
   KEEPUP_PATH: local # the json-path to read plugins from
   PULL_PLUGINS: true # whether to pull an updated mineinabyss.conf file
-  PLUGINS_BRANCH: ... # The branch to pull mineinabyss.conf from in the server-configs repo
+  PLUGINS_BRANCH: ... # The branch to pull mineinabyss.conf from in the server-config repo
 ```
 
 ## [papermc-prod](https://github.com/MineInAbyss/Docker/pkgs/container/papermc_prod)
