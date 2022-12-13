@@ -3,7 +3,7 @@
 # Mine in Abyss Docker Images
 </div>
 
-Docker containers for our production and development servers. Notably, we use [Keepup](https://github.com/MineInAbyss/Keepup/) to manage plugin versions and Ansible to help with our [server configs](https://github.com/MineInAbyss/server-config).
+Docker images for our production and development servers. Notably, we use [Keepup](https://github.com/MineInAbyss/Keepup/) to manage plugin versions and Ansible to help with our [server configs](https://github.com/MineInAbyss/server-config).
 
 # Images
 
