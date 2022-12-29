@@ -57,7 +57,7 @@ fi
 # Download plugins with keepup
 mkdir -p downloaded-plugins
 keepup downloaded-configs/servers/minecraft/plugin-versions.conf\
-  downloaded-plugins plugins --json-path=$SERVER_NAME
+  downloaded-plugins plugins --json-path=mineinabyss.servers.${SERVER_NAME}
 
 # For a bit of extra security, unset credentials used for backup before starting the server
 unset RESTIC_REPOSITORY RESTIC_PASSWORD AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY
