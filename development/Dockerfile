@@ -9,10 +9,9 @@ LABEL org.opencontainers.image.authors="Offz <offz@mineinabyss.com>"
 RUN apt-get update -y \
  && apt-get install -y rclone wget unzip
 
-ENV PLUGINS_BRANCH plugin-versions
-ENV KEEPUP_PATH local
-ENV KEEPUP enabled
-ENV PULL_PLUGINS true
+ARG KEEPUP_VERSION=1.0.0
+
+ENV PLUGINS_BRANCH=plugin-versions KEEPUP_PATH=local KEEPUP=enabled PULL_PLUGINS=true
 
 WORKDIR /opt/minecraft
 

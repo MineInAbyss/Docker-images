@@ -62,6 +62,9 @@ keepup downloaded-configs/servers/minecraft/plugin-versions.conf\
 # For a bit of extra security, unset credentials used for backup before starting the server
 unset RESTIC_REPOSITORY RESTIC_PASSWORD AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY
 
+# Recommendations from papermc https://docs.papermc.io/paper/aikars-flags
+export RECOMMENDED_MEMORY=$(expr $SERVER_MEMORY - 1500)
+
 # Convert all of the "{{VARIABLE}}" parts of the command into the expected shell
 # variable format of "${VARIABLE}" before evaluating the string and automatically
 # replacing the values.
