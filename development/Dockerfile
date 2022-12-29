@@ -20,6 +20,7 @@ RUN wget -O keepup.zip https://github.com/MineInAbyss/Keepup/releases/download/v
     && unzip keepup.zip \
     && rclone copy keepup-${KEEPUP_VERSION}/ /usr/local \
     && chmod +x /usr/local/bin/keepup \
+    && rm -rf keepup.zip keepup-${KEEPUP_VERSION}
 
 COPY ./entrypoint-mia.sh /opt/minecraft
 RUN chmod +x /opt/minecraft/entrypoint-mia.sh
