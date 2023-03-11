@@ -25,7 +25,7 @@ if [ "$KEEPUP" = "enabled" ]; then
   # If $keepupLocal doesn't exist, create it with some default contents
   if [ ! -f $keepupLocal ]; then
     echo "Creating default local keepup file"
-    echo "local: \${mineinabyss.core} {}" >$keepupLocal
+    echo "local: \${paper.core} \${paper.utility.dev-tools} {}" >$keepupLocal
   fi
 
   echo "Running keepup!"
