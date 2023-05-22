@@ -3,15 +3,15 @@
 # Environment: Java
 # Minimum Panel Version: 0.6.0
 # ----------------------------------
-FROM marctv/minecraft-papermc-server:1.19
+FROM itzg/minecraft-server:java17-jdk
 LABEL org.opencontainers.image.authors="Offz <offz@mineinabyss.com>"
 
 RUN apt-get update -y \
- && apt-get install -y rclone wget unzip
+ && apt-get install -y rclone wget unzip ansible
 
 ARG KEEPUP_VERSION=1.0.0
 
-ENV PLUGINS_BRANCH=plugin-versions KEEPUP_PATH=local KEEPUP=enabled PULL_PLUGINS=true
+ENV PLUGINS_BRANCH=plugin-versions KEEPUP_PATH=local KEEPUP=enabled PULL_PLUGINS=true SERVER_NAME=dev
 
 WORKDIR /opt/minecraft
 

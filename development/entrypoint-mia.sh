@@ -14,8 +14,11 @@ mkdir -p $keepupDownloads
 mkdir -p $paperPlugins
 
 if [ "$KEEPUP" = "enabled" ]; then
-  # run if $PULL_PLUGINS is true
-  if [ "$PULL_PLUGINS" = "true" ]; then
+  # Get the keepup config file
+  if [ -f "/server-config/servers/plugin-versions.conf" ]; then
+    echo "Copying plugin-versions.conf to $keepupLocal, not pulling from github"
+    cp /server-config/servers/plugin-versions.conf $keepupMia
+  elif [ "$PULL_PLUGINS" = "true" ]; then
     echo "Pulling plugins from $PLUGINS_BRANCH"
     wget https://raw.githubusercontent.com/MineInAbyss/server-config/$PLUGINS_BRANCH/servers/minecraft/plugin-versions.conf -O $keepupMia
   else
@@ -33,4 +36,10 @@ if [ "$KEEPUP" = "enabled" ]; then
   cat $keepupMia $keepupLocal 2>/dev/null | keepup - $keepupDownloads $paperPlugins --json-path=$KEEPUP_PATH
 fi
 
-exec /opt/minecraft/docker-entrypoint.sh
+# run playbook if local.yml file present
+if [ -f "/server-config/local.yml" ]; then
+  echo "Running ansible-playbook"
+  ansible-playbook /server-config/local.yml --extra-vars "server_name=$SERVER_NAME dest=/data"
+fi
+
+exec /start
