@@ -7,7 +7,7 @@ FROM openjdk:17-slim
 LABEL org.opencontainers.image.authors="DevScyu <scyu@scyu.dev>, Offz <offz@mineinabyss.com>"
 
 RUN apt-get update -y \
- && apt-get install -y curl ca-certificates openssl git tar sqlite3 fontconfig tzdata iproute2 ansible rclone wget restic jq unzip \
+ && apt-get install -y curl ca-certificates openssl git tar sqlite3 fontconfig tzdata iproute2 ansible rclone wget restic jq unzip rsync \
  && useradd -d /home/container -m container
 
 ARG KEEPUP_VERSION=1.0.0
