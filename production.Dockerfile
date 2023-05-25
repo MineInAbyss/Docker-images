@@ -19,11 +19,13 @@ RUN wget -O keepup.zip https://github.com/MineInAbyss/Keepup/releases/download/v
     && chmod +x /usr/local/bin/keepup \
     && rm -rf keepup.zip keepup-${KEEPUP_VERSION}
 
+COPY scripts/prod/* /scripts/prod/
+RUN chmod +x /scripts/prod/*
+
 USER container
 ENV  USER=container HOME=/home/container CONFIG_PULL_BRANCH=master
 
 WORKDIR $HOME
 
-COPY scripts/prod/* /scripts/prod/
 
 CMD ["/bin/bash", "/scripts/prod/entrypoint"]
