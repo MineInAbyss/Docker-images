@@ -1,13 +1,11 @@
 #!/bin/sh
-
 set -e
-sleep 1
 
-keepup=/data/keepup
-keepupMia=keepup/mineinabyss.conf
+keepup=$HOME/keepup
+keepupMia=$keepup/mineinabyss.conf
 keepupDownloads=$keepup/downloads
 keepupLocal=$keepup/local.conf
-paperPlugins=/data/plugins
+paperPlugins=$HOME/plugins
 
 mkdir -p $keepup
 mkdir -p $keepupDownloads
@@ -35,11 +33,3 @@ if [ "$KEEPUP" = "enabled" ]; then
   # Combines two conf files and runs keepup on the result
   cat $keepupMia $keepupLocal 2>/dev/null | keepup - $keepupDownloads $paperPlugins --json-path=$KEEPUP_PATH
 fi
-
-# run playbook if local.yml file present
-if [ -f "/server-config/local.yml" ]; then
-  echo "Running ansible-playbook"
-  ansible-playbook /server-config/local.yml --extra-vars "server_name=$SERVER_NAME dest=/data"
-fi
-
-exec /start

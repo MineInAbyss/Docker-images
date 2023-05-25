@@ -21,43 +21,18 @@
 # SOFTWARE.
 #
 
-# Default the TZ environment variable to UTC.
-TZ=${TZ:-UTC}
-export TZ
-
-# Set environment variable that holds the Internal Docker IP
-INTERNAL_IP=$(ip route get 1 | awk '{print $NF;exit}')
-export INTERNAL_IP
+exec /scripts/prod/setup
 
 # Switch to the container's working directory
 cd /home/container || exit 1
 
-# Print Java version
-printf "\033[1m\033[33mcontainer@pterodactyl~ \033[0mjava -version\n"
-java -version
-
 # wget and run update-configs.sh from our desired branch (if we ever update it, we wget now instead of having to run ansible-pull twice)
 wget -O - "https://raw.githubusercontent.com/MineInAbyss/server-config/$CONFIG_PULL_BRANCH/update-configs.sh" | sh
 
-# If env variable BACKUP_PATHS is set
-if [ -n "BACKUP_PATHS" ]; then
-  # Get the last restic snapshot date in json format
-  latestTime=$(restic snapshots --json --latest 1 | jq -r '.[0]["time"]')
-
-  # Check if it has been more than 30 hours since the last backup
-  if [ "$latestTime" = "null" ] || ["$(date -d "$latestTime" +%s)" -lt "$(date -d "30 hours ago" +%s)"]; then
-    # Loads any secrets from a file as environment variables
-    # Create restic backup
-    restic backup ${BACKUP_PATHS}
-    # Keeps all snapshots made within last day, daily for the last week, weekly for the last month, monthly for the last year, and yearly for the last 75 years
-    restic forget --keep-within 1d --keep-within-daily 7d --keep-within-weekly 1m --keep-within-monthly 1y --keep-within-yearly 75y
-  fi
-fi
+exec /scripts/prod/backup
 
 # Download plugins with keepup
-mkdir -p downloaded-plugins
-keepup downloaded-configs/servers/minecraft/plugin-versions.conf\
-  downloaded-plugins plugins --json-path=mineinabyss.servers.${SERVER_NAME}
+exec /scripts/prod/keepup
 
 # For a bit of extra security, unset credentials used for backup before starting the server
 unset RESTIC_REPOSITORY RESTIC_PASSWORD AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY

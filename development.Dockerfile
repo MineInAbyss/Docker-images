@@ -11,7 +11,7 @@ RUN apt-get update -y \
 
 ARG KEEPUP_VERSION=1.0.0
 
-ENV PLUGINS_BRANCH=plugin-versions KEEPUP_PATH=local KEEPUP=enabled PULL_PLUGINS=true SERVER_NAME=dev
+ENV PLUGINS_BRANCH=plugin-versions KEEPUP_PATH=local KEEPUP=enabled PULL_PLUGINS=true SERVER_NAME=dev HOME=/data
 
 WORKDIR /opt/minecraft
 
@@ -22,9 +22,9 @@ RUN wget -O keepup.zip https://github.com/MineInAbyss/Keepup/releases/download/v
     && chmod +x /usr/local/bin/keepup \
     && rm -rf keepup.zip keepup-${KEEPUP_VERSION}
 
-COPY ./entrypoint-mia.sh /opt/minecraft
-RUN chmod +x /opt/minecraft/entrypoint-mia.sh
+COPY scripts/dev /scripts/dev
+RUN chmod +x /scripts/dev/*
 
-WORKDIR /data
+WORKDIR $HOME
 
-ENTRYPOINT ["/opt/minecraft/entrypoint-mia.sh"]
+ENTRYPOINT ["/scripts/dev/entrypoint.sh"]
