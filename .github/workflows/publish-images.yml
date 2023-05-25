@@ -3,10 +3,6 @@ on:
   push:
     branches:
       - master
-    paths:
-      - .github/workflows/publish-images.yml
-      - production/**
-      - development/**
   workflow_dispatch:
 
 env:
@@ -23,10 +19,10 @@ jobs:
       matrix:
         include:
           - image: papermc_dev
-            path: ./development
+            file: development.Dockerfile
             platforms: linux/amd64,linux/arm64
           - image: papermc_prod
-            path: ./production
+            file: production.Dockerfile
             platforms: linux/amd64
     steps:
       - uses: actions/checkout@v3
@@ -55,8 +51,7 @@ jobs:
       - name: Build and push ${{ matrix.image }}
         uses: docker/build-push-action@v3
         with:
-          context: ${{ matrix.path }}
-          file: ${{ matrix.path }}/Dockerfile
+          file: ${{ matrix.dockerfile }}
           platforms: ${{ matrix.platforms }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
