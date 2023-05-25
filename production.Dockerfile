@@ -10,7 +10,7 @@ RUN apt-get update -y \
  && apt-get install -y curl ca-certificates openssl git tar sqlite3 fontconfig tzdata iproute2 ansible rclone wget restic jq unzip rsync \
  && useradd -d /home/container -m container
 
-ARG KEEPUP_VERSION=1.0.0
+ARG KEEPUP_VERSION=1.1.0
 
 RUN wget -O keepup.zip https://github.com/MineInAbyss/Keepup/releases/download/v${KEEPUP_VERSION}/keepup-${KEEPUP_VERSION}.zip  \
     # unzip file inside hocon-to-json.zip into /usr/local \
@@ -25,7 +25,5 @@ ENV  USER=container HOME=/home/container CONFIG_PULL_BRANCH=master
 WORKDIR $HOME
 
 COPY scripts/prod/* /scripts/prod/
-# RUN chmod +x /scripts/prod/*
 
-ENTRYPOINT ["/scripts/prod/entrypoint.sh"]
-#CMD ["/bin/bash", "/entrypoint.sh"]
+CMD ["/bin/bash", "/scripts/prod/entrypoint"]

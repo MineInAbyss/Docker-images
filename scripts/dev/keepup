@@ -12,12 +12,12 @@ mkdir -p $keepupDownloads
 mkdir -p $paperPlugins
 
 if [ "$KEEPUP" = "enabled" ]; then
-  # Get the keepup config file
+  echo "Getting keepup config!"
   if [ -f "/server-config/servers/plugin-versions.conf" ]; then
-    echo "Copying plugin-versions.conf to $keepupLocal, not pulling from github"
+    echo "Found local plugin-versions.conf"
     cp /server-config/servers/plugin-versions.conf $keepupMia
   elif [ "$PULL_PLUGINS" = "true" ]; then
-    echo "Pulling plugins from $PLUGINS_BRANCH"
+    echo "Pulling plugin-versions.conf from GitHub on branch $PLUGINS_BRANCH"
     wget https://raw.githubusercontent.com/MineInAbyss/server-config/$PLUGINS_BRANCH/servers/minecraft/plugin-versions.conf -O $keepupMia
   else
     echo "PULL_PLUGINS is false, not pulling updates"

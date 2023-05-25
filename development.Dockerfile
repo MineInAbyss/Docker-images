@@ -9,7 +9,7 @@ LABEL org.opencontainers.image.authors="Offz <offz@mineinabyss.com>"
 RUN apt-get update -y \
  && apt-get install -y rclone wget unzip ansible
 
-ARG KEEPUP_VERSION=1.0.0
+ARG KEEPUP_VERSION=1.1.0
 
 ENV PLUGINS_BRANCH=plugin-versions KEEPUP_PATH=local KEEPUP=enabled PULL_PLUGINS=true SERVER_NAME=dev HOME=/data
 
@@ -27,4 +27,4 @@ RUN chmod +x /scripts/dev/*
 
 WORKDIR $HOME
 
-ENTRYPOINT ["/scripts/dev/entrypoint.sh"]
+ENTRYPOINT ["/scripts/dev/entrypoint"]
