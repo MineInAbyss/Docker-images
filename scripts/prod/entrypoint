@@ -29,10 +29,10 @@ cd /home/container || exit 1
 # wget and run update-configs.sh from our desired branch (if we ever update it, we wget now instead of having to run ansible-pull twice)
 wget -O - "https://raw.githubusercontent.com/MineInAbyss/server-config/$CONFIG_PULL_BRANCH/update-configs.sh" | sh
 
-exec /scripts/prod/backup
+. /scripts/prod/backup
 
 # Download plugins with keepup
-exec /scripts/prod/keepup
+. /scripts/prod/keepup
 
 # For a bit of extra security, unset credentials used for backup before starting the server
 unset RESTIC_REPOSITORY RESTIC_PASSWORD AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY
