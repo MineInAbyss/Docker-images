@@ -21,7 +21,7 @@
 # SOFTWARE.
 #
 
-exec /scripts/prod/setup
+. /scripts/prod/setup
 
 # Switch to the container's working directory
 cd /home/container || exit 1
