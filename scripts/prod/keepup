@@ -1,10 +1,18 @@
 #!/bin/bash
 
 keepup=$HOME/keepup
+downloadPath=$HOME/downloaded-plugins
 
 echo "Running keepup!"
 
-mkdir -p $keepup/downloads
-keepup $HOME/downloaded-configs/servers/plugin-versions.conf\
-  downloaded-plugins plugins --json-path=mineinabyss.servers.${SERVER_NAME}
-#--token=${KEEPUP_PRIVATE_TOKEN}
+mkdir -p $keepup
+mkdir -p $downloadPath
+
+pluginVersions=$HOME/downloaded-configs/servers/plugin-versions.conf
+
+if [ -f "$keepup/override.conf" ]; then
+  pluginVersions=$keepup/override.conf
+fi
+
+keepup $pluginVersions\
+  $downloadPath plugins --json-path=mineinabyss.servers.${SERVER_NAME}
