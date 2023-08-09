@@ -11,10 +11,17 @@ RUN apt-get update -y \
 
 ARG KEEPUP_VERSION=1.1.0
 
-ENV PLUGINS_BRANCH=plugin-versions KEEPUP_PATH=local KEEPUP=enabled PULL_PLUGINS=true SERVER_NAME=dev HOME=/data
+ENV
+    KEEPUP=enabled
+    KEEPUP_ALLOW_OVERRIDES=true
+    ANSIBLE_PULL=enabled
+    ANSIBLE_PULL_BRANCH=master
+    SERVER_NAME=dev
+    HOME=/data
 
 WORKDIR /opt/minecraft
 
+# Install keepup
 RUN wget -O keepup.zip https://github.com/MineInAbyss/Keepup/releases/download/v${KEEPUP_VERSION}/keepup-${KEEPUP_VERSION}.zip  \
     # unzip file inside hocon-to-json.zip into /usr/local \
     && unzip keepup.zip \
@@ -22,6 +29,7 @@ RUN wget -O keepup.zip https://github.com/MineInAbyss/Keepup/releases/download/v
     && chmod +x /usr/local/bin/keepup \
     && rm -rf keepup.zip keepup-${KEEPUP_VERSION}
 
+# Copy over scripts
 COPY scripts/dev /scripts/dev
 RUN chmod +x /scripts/dev/*
 

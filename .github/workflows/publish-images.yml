@@ -18,11 +18,11 @@ jobs:
     strategy:
       matrix:
         include:
-          - image: papermc_dev
-            dockerfile: development.Dockerfile
+          - image: minecraft
+            dockerfile: minecraft.Dockerfile
             platforms: linux/amd64,linux/arm64
-          - image: papermc_prod
-            dockerfile: production.Dockerfile
+          - image: proxy
+            dockerfile: proxy.Dockerfile
             platforms: linux/amd64
     steps:
       - uses: actions/checkout@v3

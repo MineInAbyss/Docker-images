@@ -3,15 +3,25 @@
 # Environment: Java
 # Minimum Panel Version: 0.6.0
 # ----------------------------------
-FROM openjdk:17-slim
-LABEL org.opencontainers.image.authors="DevScyu <scyu@scyu.dev>, Offz <offz@mineinabyss.com>"
+FROM itzg/bungeecord
+LABEL org.opencontainers.image.authors="Offz <offz@mineinabyss.com>"
 
 RUN apt-get update -y \
- && apt-get install -y curl ca-certificates openssl git tar sqlite3 fontconfig tzdata iproute2 ansible rclone wget restic jq unzip rsync \
- && useradd -d /home/container -m container
+ && apt-get install -y rclone wget unzip ansible
 
 ARG KEEPUP_VERSION=1.1.0
 
+ENV
+    KEEPUP=enabled
+    KEEPUP_ALLOW_OVERRIDES=true
+    ANSIBLE_PULL=enabled
+    ANSIBLE_PULL_BRANCH=master
+    SERVER_NAME=dev
+    HOME=/data
+
+WORKDIR /opt/minecraft
+
+# Install keepup
 RUN wget -O keepup.zip https://github.com/MineInAbyss/Keepup/releases/download/v${KEEPUP_VERSION}/keepup-${KEEPUP_VERSION}.zip  \
     # unzip file inside hocon-to-json.zip into /usr/local \
     && unzip keepup.zip \
@@ -19,13 +29,10 @@ RUN wget -O keepup.zip https://github.com/MineInAbyss/Keepup/releases/download/v
     && chmod +x /usr/local/bin/keepup \
     && rm -rf keepup.zip keepup-${KEEPUP_VERSION}
 
-COPY scripts/prod/* /scripts/prod/
-RUN chmod +x /scripts/prod/*
-
-USER container
-ENV  USER=container HOME=/home/container CONFIG_PULL_BRANCH=master
+# Copy over scripts
+COPY scripts/dev /scripts/dev
+RUN chmod +x /scripts/dev/*
 
 WORKDIR $HOME
 
-
-CMD ["/bin/bash", "/scripts/prod/entrypoint"]
+ENTRYPOINT ["/scripts/dev/entrypoint"]

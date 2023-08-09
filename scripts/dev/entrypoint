@@ -1,9 +1,8 @@
 #!/bin/sh
 
 set -e
-sleep 1
 
-. /scripts/dev/keepup
 . /scripts/dev/ansible
+. /scripts/dev/keepup
 
 exec /start

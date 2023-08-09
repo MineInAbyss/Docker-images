@@ -7,35 +7,32 @@ Docker images for our production and development servers. Notably, we use [Keepu
 
 # Images
 
-## [papermc-dev](https://github.com/MineInAbyss/Docker/pkgs/container/papermc_dev)
+## [minecraft](https://github.com/MineInAbyss/Docker/pkgs/container/papermc_dev)
 
-A PaperMC image for developers to use on their local machines (see [our wiki](https://wiki.mineinabyss.com/contributing/setup/server-setup/) for a Docker Compose file and more info for setting up locally.)
+A PaperMC image based on [itzg/minecraft-server](https://github.com/itzg/docker-minecraft-server). See [our wiki](https://wiki.mineinabyss.com/contributing/setup/server-setup/) for a Docker Compose file and more info for setting up locally.
 
-- Pulls plugins using Keepup. Merges an auto downloaded `mineinabyss.conf` file with a `local.conf` under the `keepup` folder.
-- Starts paper using this [image](https://github.com/mtoensing/Docker-Minecraft-PaperMC-Server).
-- TODO: No fine control over server version, may need to make our own base image (using alpine linux would reduce filesize too)
+- Pulls ansible playbook from server config repo and runs it
+- Runs keepup on 
 
-```yaml
-environment:
-  KEEPUP: enabled # whether to run keepup at all
-  KEEPUP_PATH: local # the json-path to read plugins from
-  PULL_PLUGINS: true # whether to pull an updated mineinabyss.conf file
-  PLUGINS_BRANCH: ... # The branch to pull mineinabyss.conf from in the server-config repo
-```
+### Volumes
+- `/data` server data
+- `/server-config` storage for server config repo
 
-## [papermc-prod](https://github.com/MineInAbyss/Docker/pkgs/container/papermc_prod)
+### Environment
 
-A PaperMC image we use in production. Runs config sync with ansible (and eventually plugin sync with Keepup.)
-
-- Pulls and runs an [Ansible](https://ansible.com/) playbook found on [server-config](https://github.com/MineInAbyss/server-config) to copy config files based on the current server. Can choose which branch to pull from by making a `config-branch` file.
-  - TODO: Change to use env variables for config branch
-- Runs backup using Restic to the remote defined in `secrets-backup`.
-  - TODO: Change to use env variables for remote config
-- TODO: run keepup to pull plugins based on SERVER_NAME
+Default values specified below:
 
 ```yaml
 environment:
-  USER: container
-  HOME: /home/container
-  SERVER_NAME: - # The server name (used to choose which configs to pull)
+  KEEPUP: enabled # Runs keepup if set to 'enabled'
+  KEEPUP_ALLOW_OVERRIDES: true # Allow overriding plugin versions defined in server-config
+  ANSIBLE: enabled # Tries to run ansible if set to 'enabled
+  ANSIBLE_PULL: enabled # Pulls and runs server-config ansible playbook if set to 'enabled', otherwise tries to run local playbook
+  ANSIBLE_PULL_BRANCH: master # server-config branch to pull from
+  SERVER_NAME: dev # Name of this server, used in server-config playbook
 ```
+
+
+## [proxy](https://github.com/MineInAbyss/Docker/pkgs/container/proxy)
+
+Same as `papermc` image, but based on [itzg/bungeecord](https://github.com/itzg/docker-bungeecord)
