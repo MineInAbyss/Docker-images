@@ -1,18 +1,17 @@
 #!/bin/sh
 set -e
 
-keepup=$HOME/keepup
-keepupMia=$keepup/mineinabyss.conf
-keepupDownloads=$keepup/downloads
-keepupOverridesFile=$keepup/overrides.conf
-paperPlugins=$HOME/plugins
+keepupDir=$HOME/keepupDir
+keepupDownloadsDir=$keepupDir/downloads
+keepupOverridesFile=$keepupDir/overrides.conf
+pluginsDir=$HOME/plugins
 pluginVersionsFile=/server-config/servers/plugin-versions.conf
 
-mkdir -p "$keepup"
-mkdir -p "$keepupDownloads"
-mkdir -p "$paperPlugins"
+mkdir -p "$keepupDir"
+mkdir -p "$keepupDownloadsDir"
+mkdir -p "$pluginsDir"
 
-if [ "$KEEPUP" = "enabled" ]; then
+if [ "$KEEPUP" = "true" ]; then
   echo "Keepup enabled"
 
   if  [ "$KEEPUP_ALLOW_OVERRIDES" = "true" ]; then
@@ -21,14 +20,19 @@ if [ "$KEEPUP" = "enabled" ]; then
       touch "$keepupOverridesFile"
     fi
 
+    if [ ! -f "$pluginVersionsFile" ]; then
+          echo "Plugin versions file not found at $pluginVersionsFile, skipping keepup"
+          return
+    fi
+
     echo "Running keepup with overrides"
-    cat $keepupMia $keepupOverridesFile 2>/dev/null\
-      | keepup - $keepupDownloads $paperPlugins --json-path=servers.${SERVER_NAME}
+    cat $pluginVersionsFile $keepupOverridesFile 2>/dev/null\
+      | keepup - $keepupDownloadsDir $pluginsDir --json-path=mineinabyss.servers.${SERVER_NAME}
   else
     echo "Running keepup without overrides"
     keepup $pluginVersionsFile\
-      $keepupDownloads $paperPlugins --json-path=servers.${SERVER_NAME}
+      $keepupDownloadsDir $pluginsDir --json-path=mineinabyss.servers.${SERVER_NAME}
   fi
 else
-  echo "KEEPUP is not set to 'enabled', not running keepup"
+  echo "KEEPUP is not set to 'true', not running keepup"
 fi

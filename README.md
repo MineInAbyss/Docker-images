@@ -12,7 +12,8 @@ Docker images for our production and development servers. Notably, we use [Keepu
 A PaperMC image based on [itzg/minecraft-server](https://github.com/itzg/docker-minecraft-server). See [our wiki](https://wiki.mineinabyss.com/contributing/setup/server-setup/) for a Docker Compose file and more info for setting up locally.
 
 - Pulls ansible playbook from server config repo and runs it
-- Runs keepup on 
+- Runs keepup based on the plugin versions in server config, with override options
+  - Uses `mineinabyss.servers.$SERVER_NAME` as the keepup path
 
 ### Volumes
 - `/data` server data
@@ -24,10 +25,10 @@ Default values specified below:
 
 ```yaml
 environment:
-  KEEPUP: enabled # Runs keepup if set to 'enabled'
+  KEEPUP: true # Runs keepup if set to 'enabled'
   KEEPUP_ALLOW_OVERRIDES: true # Allow overriding plugin versions defined in server-config
-  ANSIBLE: enabled # Tries to run ansible if set to 'enabled
-  ANSIBLE_PULL: enabled # Pulls and runs server-config ansible playbook if set to 'enabled', otherwise tries to run local playbook
+  ANSIBLE: true # Tries to run ansible if set to 'enabled
+  ANSIBLE_PULL: true # Pulls and runs server-config ansible playbook if set to 'enabled', otherwise tries to run local playbook
   ANSIBLE_PULL_BRANCH: master # server-config branch to pull from
   SERVER_NAME: dev # Name of this server, used in server-config playbook
 ```

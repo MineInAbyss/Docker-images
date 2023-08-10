@@ -11,12 +11,13 @@ RUN apt-get update -y \
 
 ARG KEEPUP_VERSION=1.1.0
 
-ENV
-    KEEPUP=enabled
-    KEEPUP_ALLOW_OVERRIDES=true
-    ANSIBLE_PULL=enabled
-    ANSIBLE_PULL_BRANCH=master
-    SERVER_NAME=dev
+ENV\
+    KEEPUP=true\
+    KEEPUP_ALLOW_OVERRIDES=true\
+    ANSIBLE=true\
+    ANSIBLE_PULL=true\
+    ANSIBLE_PULL_BRANCH=master\
+    SERVER_NAME=dev\
     HOME=/data
 
 WORKDIR /opt/minecraft
