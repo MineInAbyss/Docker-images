@@ -7,7 +7,7 @@ FROM itzg/bungeecord
 LABEL org.opencontainers.image.authors="Offz <offz@mineinabyss.com>"
 
 RUN apt-get update -y \
- && apt-get install -y rclone wget unzip ansible
+ && apt-get install -y rsync rclone wget unzip ansible git
 
 ARG KEEPUP_VERSION=1.1.0
 
@@ -18,7 +18,7 @@ ENV\
     ANSIBLE_PULL=true\
     ANSIBLE_PULL_BRANCH=master\
     SERVER_NAME=dev\
-    HOME=/data
+    HOME=/server
 
 WORKDIR /opt/minecraft
 
@@ -36,4 +36,5 @@ RUN chmod +x /scripts/dev/*
 
 WORKDIR $HOME
 
+RUN cp /usr/bin/run-bungeecord.sh /start
 ENTRYPOINT ["/scripts/dev/entrypoint"]
