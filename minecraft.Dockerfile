@@ -7,7 +7,11 @@ FROM itzg/minecraft-server:java17-jdk
 LABEL org.opencontainers.image.authors="Offz <offz@mineinabyss.com>"
 
 RUN apt-get update -y \
- && apt-get install -y rclone wget unzip ansible
+ && apt-get install -y rclone wget unzip pipx python3-venv
+
+RUN pipx install --include-deps ansible
+
+ENV PATH="$PATH:/root/.local/bin"
 
 ARG KEEPUP_VERSION=1.1.0
 
@@ -36,4 +40,4 @@ RUN chmod +x /scripts/dev/*
 
 WORKDIR $HOME
 
-ENTRYPOINT ["/scripts/dev/entrypoint"]
+CMD ["/scripts/dev/entrypoint"]

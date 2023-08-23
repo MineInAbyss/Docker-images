@@ -7,7 +7,11 @@ FROM itzg/bungeecord
 LABEL org.opencontainers.image.authors="Offz <offz@mineinabyss.com>"
 
 RUN apt-get update -y \
- && apt-get install -y rsync rclone wget unzip ansible git
+ && apt-get install -y rsync rclone wget unzip git pipx python3-venv
+
+RUN pipx install --include-deps ansible
+
+ENV PATH="$PATH:/root/.local/bin"
 
 ARG KEEPUP_VERSION=1.1.0
 
