@@ -3,13 +3,11 @@
 # Environment: Java
 # Minimum Panel Version: 0.6.0
 # ----------------------------------
-FROM itzg/minecraft-server:java17-jdk
+FROM itzg/minecraft-server:java17-alpine
 LABEL org.opencontainers.image.authors="Offz <offz@mineinabyss.com>"
 
-RUN apt-get update -y \
- && apt-get install -y rclone wget unzip pipx python3-venv
-
-RUN PIPX_HOME=/opt/pipx PIPX_BIN_DIR=/usr/local/bin pipx install --include-deps ansible
+RUN apk add --no-cache ansible-core rclone wget unzip \
+  && ansible-galaxy collection install community.general
 
 ARG KEEPUP_VERSION=1.1.0
 
@@ -38,4 +36,4 @@ RUN chmod +x /scripts/dev/*
 
 WORKDIR $HOME
 
-CMD ["/scripts/dev/entrypoint"]
+ENTRYPOINT ["/scripts/dev/entrypoint"]
