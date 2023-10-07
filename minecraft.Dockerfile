@@ -6,8 +6,7 @@
 FROM itzg/minecraft-server:java17-alpine
 LABEL org.opencontainers.image.authors="Offz <offz@mineinabyss.com>"
 
-RUN apk add --no-cache ansible-core rclone wget unzip \
-  && ansible-galaxy collection install community.general
+RUN apk add --no-cache ansible rclone wget unzip
 
 ARG KEEPUP_VERSION=1.1.0
 
