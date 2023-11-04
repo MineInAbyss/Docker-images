@@ -31,6 +31,7 @@ environment:
   ANSIBLE_PULL: true # Pulls and runs server-config ansible playbook if set to 'enabled', otherwise tries to run local playbook
   ANSIBLE_PULL_BRANCH: master # server-config branch to pull from
   SERVER_NAME: dev # Name of this server, used in server-config playbook
+  UPDATE_DATA_OWNER: false # whether to update the owner of /data to UID:GID
 ```
 
 
