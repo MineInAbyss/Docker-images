@@ -7,11 +7,11 @@ FROM itzg/bungeecord
 LABEL org.opencontainers.image.authors="Offz <offz@mineinabyss.com>"
 
 RUN apt-get update -y \
- && apt-get install -y rsync rclone wget unzip git pipx python3-venv
+ && apt-get install -y rsync rclone wget unzip git pipx python3-venv jq
 
 RUN PIPX_HOME=/opt/pipx PIPX_BIN_DIR=/usr/local/bin pipx install --include-deps ansible
 
-ARG KEEPUP_VERSION=1.1.3
+ARG KEEPUP_VERSION=1.2.0
 
 ENV\
     KEEPUP=true\

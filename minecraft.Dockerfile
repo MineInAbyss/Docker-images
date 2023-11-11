@@ -6,9 +6,9 @@
 FROM itzg/minecraft-server:java17-alpine
 LABEL org.opencontainers.image.authors="Offz <offz@mineinabyss.com>"
 
-RUN apk add --no-cache ansible rclone wget unzip
+RUN apk add --no-cache ansible rclone wget unzip jq
 
-ARG KEEPUP_VERSION=1.1.3
+ARG KEEPUP_VERSION=1.2.0
 
 ENV\
     KEEPUP=true\
@@ -22,9 +22,9 @@ ENV\
 WORKDIR /opt/minecraft
 
 # Install keepup
-RUN wget -O keepup.zip https://github.com/MineInAbyss/Keepup/releases/download/v${KEEPUP_VERSION}/keepup-${KEEPUP_VERSION}.zip  \
+RUN wget -nv -O keepup.zip https://github.com/MineInAbyss/Keepup/releases/download/v${KEEPUP_VERSION}/keepup-${KEEPUP_VERSION}.zip  \
     # unzip file inside hocon-to-json.zip into /usr/local \
-    && unzip keepup.zip \
+    && unzip -q keepup.zip \
     && rclone copy keepup-${KEEPUP_VERSION}/ /usr/local \
     && chmod +x /usr/local/bin/keepup \
     && rm -rf keepup.zip keepup-${KEEPUP_VERSION}
