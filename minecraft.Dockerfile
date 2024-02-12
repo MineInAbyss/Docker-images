@@ -8,7 +8,7 @@ LABEL org.opencontainers.image.authors="Offz <offz@mineinabyss.com>"
 
 RUN apk add --no-cache ansible rclone wget unzip jq
 
-ARG KEEPUP_VERSION=1.2.2
+ARG KEEPUP_VERSION=2.0.0-beta.1
 
 ENV\
     KEEPUP=true\
@@ -27,7 +27,7 @@ RUN wget https://www.yourkit.com/download/docker/YourKit-JavaProfiler-2023.9-doc
   rm /tmp/YourKit-JavaProfiler-2023.9-docker.zip
 
 # Install keepup
-RUN wget -nv -O keepup.zip https://github.com/MineInAbyss/Keepup/releases/download/v${KEEPUP_VERSION}/keepup-${KEEPUP_VERSION}.zip  \
+RUN wget -nv -O keepup.zip https://github.com/MineInAbyss/Keepup/releases/download/v${KEEPUP_VERSION}/keepup-shadow-${KEEPUP_VERSION}.zip  \
     # unzip file inside hocon-to-json.zip into /usr/local \
     && unzip -q keepup.zip \
     && rclone copy keepup-${KEEPUP_VERSION}/ /usr/local \

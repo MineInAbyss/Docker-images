@@ -25,13 +25,18 @@ if [ "$KEEPUP" = "true" ]; then
           return
     fi
 
+
+    if [ -z "$KEEPUP_JSON_PATH" ]; then
+      export KEEPUP_JSON_PATH=mineinabyss.servers.${SERVER_NAME}
+    fi
+
     echo "Running keepup with overrides"
     cat $pluginVersionsFile $keepupOverridesFile 2>/dev/null\
-      | keepup - $keepupDownloadsDir $pluginsDir --json-path=mineinabyss.servers.${SERVER_NAME}
+      | keepup - $keepupDownloadsDir $pluginsDir
   else
     echo "Running keepup without overrides"
     keepup $pluginVersionsFile\
-      $keepupDownloadsDir $pluginsDir --json-path=mineinabyss.servers.${SERVER_NAME}
+      $keepupDownloadsDir $pluginsDir
   fi
 else
   echo "KEEPUP is not set to 'true', not running keepup"
