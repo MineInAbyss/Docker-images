@@ -8,7 +8,7 @@ LABEL org.opencontainers.image.authors="Offz <offz@mineinabyss.com>"
 
 RUN apk add --no-cache ansible rclone wget unzip jq
 
-ARG KEEPUP_VERSION=2.0.0-beta.1
+ARG KEEPUP_VERSION=2.0.0-beta.2
 
 ENV\
     KEEPUP=true\
