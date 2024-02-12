@@ -30,9 +30,9 @@ RUN wget https://www.yourkit.com/download/docker/YourKit-JavaProfiler-2023.9-doc
 RUN wget -nv -O keepup.zip https://github.com/MineInAbyss/Keepup/releases/download/v${KEEPUP_VERSION}/keepup-shadow-${KEEPUP_VERSION}.zip  \
     # unzip file inside hocon-to-json.zip into /usr/local \
     && unzip -q keepup.zip \
-    && rclone copy keepup-${KEEPUP_VERSION}/ /usr/local \
+    && rclone copy keepup-shadow-${KEEPUP_VERSION}/ /usr/local \
     && chmod +x /usr/local/bin/keepup \
-    && rm -rf keepup.zip keepup-${KEEPUP_VERSION}
+    && rm -rf keepup.zip keepup-shadow-${KEEPUP_VERSION}
 
 # Copy over scripts
 COPY scripts/dev /scripts/dev
