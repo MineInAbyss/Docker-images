@@ -18,7 +18,7 @@ COPY config/ansible-requirements.yml /opt/ansible/requirements.yml
 RUN ansible-galaxy collection install -r /opt/ansible/requirements.yml -p /opt/ansible/collections \
     && rm /opt/ansible/requirements.yml
 
-ARG KEEPUP_VERSION=2.0.1
+ARG KEEPUP_VERSION=2.0.2
 
 ENV\
     KEEPUP=true\
