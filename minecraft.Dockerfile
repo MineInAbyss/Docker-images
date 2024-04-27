@@ -3,7 +3,7 @@
 # Environment: Java
 # Minimum Panel Version: 0.6.0
 # ----------------------------------
-FROM itzg/minecraft-server:java17-alpine
+FROM itzg/minecraft-server:java21-alpine
 LABEL org.opencontainers.image.authors="Offz <offz@mineinabyss.com>"
 
 RUN apk add --no-cache ansible-core rclone wget unzip jq openssh
