@@ -4,7 +4,7 @@
 # Minimum Panel Version: 0.6.0
 # ----------------------------------
 FROM alpine as helper
-ARG KEEPUP_VERSION='3.0.0-alpha.1'
+ARG KEEPUP_VERSION='3.0.0-alpha.2'
 RUN wget -nv -q -O keepup.zip https://github.com/MineInAbyss/Keepup/releases/download/v${KEEPUP_VERSION}/keepup-shadow-${KEEPUP_VERSION}.zip  \
     # unzip file inside hocon-to-json.zip into /usr/local \
     && unzip -q keepup.zip \

@@ -19,10 +19,8 @@ jobs:
       matrix:
         include:
           - target: minecraft
-            dockerfile: minecraft.Dockerfile
             platforms: linux/amd64,linux/arm64
           - target: proxy
-            dockerfile: proxy.Dockerfile
             platforms: linux/amd64
     steps:
       - uses: actions/checkout@v4
@@ -51,7 +49,7 @@ jobs:
       - name: Build and push ${{ matrix.target }}
         uses: docker/build-push-action@v5
         with:
-          file: ${{ matrix.dockerfile }}
+          file: Dockerfile
           platforms: ${{ matrix.platforms }}
           push: true
           target: ${{ matrix.target }}
