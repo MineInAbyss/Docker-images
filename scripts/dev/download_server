@@ -1,0 +1,10 @@
+#!/bin/sh
+set -e
+
+if [ "$CUSTOM_SERVER_URL" ]; then
+  if [ ! "$CUSTOM_SERVER" ]; then
+    export CUSTOM_SERVER=server.jar
+  fi
+  echo "Checking for server updates from $CUSTOM_SERVER_URL"
+  wget -N -q --show-progress "$CUSTOM_SERVER_URL" -c --output-document="$CUSTOM_SERVER"
+fi
