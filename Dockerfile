@@ -14,9 +14,9 @@ RUN wget -nv -q -O keepup.zip https://github.com/MineInAbyss/Keepup/releases/dow
 #  unzip /tmp/YourKit-JavaProfiler-2023.9-docker.zip -d /usr/local && \
 
 
-FROM itzg/minecraft-server:java21-alpine as minecraft
+FROM itzg/minecraft-server:java21-graalvm as minecraft
 LABEL org.opencontainers.image.authors="Offz <offz@mineinabyss.com>"
-RUN apk add --no-cache ansible-core rclone wget unzip jq openssh
+RUN dnf install -y ansible-core rclone wget unzip jq openssh
 COPY --from=helper /keepup /usr/local
 ENV\
     KEEPUP=true\
@@ -26,7 +26,8 @@ ENV\
     ANSIBLE_PULL_BRANCH=master\
     SERVER_NAME=dev\
     HOME=/data\
-    ANSIBLE_CONFIG=/server-config/ansible.cfg
+    ANSIBLE_CONFIG=/server-config/ansible.cfg\
+    LC_ALL=C.UTF-8
 
 # Install ansible collections
 COPY config/ansible-requirements.yml /opt/ansible/requirements.yml
