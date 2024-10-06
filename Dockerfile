@@ -16,7 +16,7 @@ RUN wget -nv -q -O keepup.zip https://github.com/MineInAbyss/Keepup/releases/dow
 
 FROM itzg/minecraft-server:java21-graalvm as minecraft
 LABEL org.opencontainers.image.authors="Offz <offz@mineinabyss.com>"
-RUN dnf install -y ansible-core rclone wget unzip jq openssh
+RUN dnf install -y ansible-core rclone wget unzip jq openssh attr
 COPY --from=helper /keepup /usr/local
 ENV\
     KEEPUP=true\
