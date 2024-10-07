@@ -1,16 +1,18 @@
 #!/bin/sh
 set -e
 
+PREFIX="[Init]"
+
 if [ "$ANSIBLE" = "true" ]; then
   if [ "$ANSIBLE_PULL" = "true" ]; then
-    echo "Pulling and running latest server config ansible playbook"
+    echo "$PREFIX Pulling and running latest server config ansible playbook"
 
     ansible-pull -U "https://github.com/MineInAbyss/server-config.git" -d "/server-config" --checkout "${ANSIBLE_PULL_BRANCH:=master}"
   elif [ -f "/server-config/local.yml" ]; then
-    echo "Running local server config ansible playbook"
+    echo "$PREFIX Running local server config ansible playbook"
 
     ansible-playbook /server-config/local.yml --extra-vars "server_name=$SERVER_NAME dest=/data"
   fi
 else
-  echo "ANSIBLE not set to 'true', not running playbook"
+  echo "$PREFIX ANSIBLE not set to 'true', not running playbook"
 fi

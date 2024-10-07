@@ -7,7 +7,7 @@ set -e
 . /scripts/dev/download_server
 
 if [ "$UPDATE_DATA_OWNER" = "true" ]; then
-  echo "Updating owner for /data to $UID:$GID"
+  echo "[Init] Updating owner for /data to $UID:$GID"
   chown $UID:$GID -R /data
 fi
 
