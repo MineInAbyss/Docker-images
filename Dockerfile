@@ -4,7 +4,7 @@
 # Minimum Panel Version: 0.6.0
 # ----------------------------------
 FROM alpine as helper
-ARG KEEPUP_VERSION='3.1.0-alpha.3'
+ARG KEEPUP_VERSION='3.1.0-alpha.4'
 RUN wget -nv -q -O keepup.zip https://github.com/MineInAbyss/Keepup/releases/download/v${KEEPUP_VERSION}/keepup-${KEEPUP_VERSION}.zip  \
     # unzip file inside hocon-to-json.zip into /usr/local \
     && unzip -q keepup.zip \
@@ -45,7 +45,7 @@ ENTRYPOINT ["/scripts/dev/entrypoint"]
 FROM itzg/bungeecord as proxy
 LABEL org.opencontainers.image.authors="Offz <offz@mineinabyss.com>"
 RUN apt-get update -y \
- && apt-get install -y rsync rclone wget unzip git pipx python3-venv jq
+ && apt-get install -y rsync rclone wget unzip git pipx python3-venv jq file
 COPY --from=helper /keepup /usr/local
 ENV\
     KEEPUP=true\
@@ -55,6 +55,7 @@ ENV\
     ANSIBLE_PULL_BRANCH=master\
     SERVER_NAME=dev\
     HOME=/server\
+    TYPE=velocity\
     ANSIBLE_CONFIG=/server-config/ansible.cfg
 
 # Install ansible & collections
