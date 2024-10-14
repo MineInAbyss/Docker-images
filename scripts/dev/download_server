@@ -1,4 +1,4 @@
-hore:#!/bin/sh
+#!/bin/sh
 set -e
 
 PREFIX="[Init]"
