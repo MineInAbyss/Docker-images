@@ -1,5 +1,5 @@
 #!/bin/sh
-set -e
+# set -e
 
 PREFIX="[Init]"
 if [ "$CUSTOM_SERVER_REPO" ]; then
@@ -8,8 +8,12 @@ if [ "$CUSTOM_SERVER_REPO" ]; then
 
   echo "$PREFIX Checking for server updates from $CUSTOM_SERVER_REPO"
 
+  [ "$KEEPUP_GITHUB_AUTH_TOKEN" ] && AUTHORIZATION="--header 'authorization: Bearer $KEEPUP_GITHUB_AUTH_TOKEN'" || AUTHORIZATION=""
+
   GITHUB_API="https://api.github.com/repos/$CUSTOM_SERVER_REPO/releases/$CUSTOM_SERVER_TAG"
-  LATEST_RELEASE_DATE=$(curl -s "$GITHUB_API" --header "authorization: Bearer $KEEPUP_GITHUB_AUTH_TOKEN" | jq -r '.published_at' 2>/dev/null)
+  GITHUB_RESPONSE=$(curl $AUTHORIZATION -s "$GITHUB_API")
+
+  LATEST_RELEASE_DATE=$(echo $GITHUB_RESPONSE | jq -r '.published_at' 2>/dev/null)
   CURRENT_RELEASE_DATE=$(getfattr --only-values -n user.release-date "$CUSTOM_SERVER" 2>/dev/null)
 
   echo "$PREFIX Latest release date: $LATEST_RELEASE_DATE"
@@ -17,8 +21,8 @@ if [ "$CUSTOM_SERVER_REPO" ]; then
 
   if [ "$LATEST_RELEASE_DATE" != "$CURRENT_RELEASE_DATE" ]; then
     echo "$PREFIX Downloading new release, release date: $LATEST_RELEASE_DATE"
-    wget $(curl -s "$GITHUB_API"  | jq -r '.assets[] | select(.name | contains ("jar")) | .browser_download_url')\
-      -q --show-progress -O "$CUSTOM_SERVER"
+    wget $(echo $GITHUB_RESPONSE | jq -r '.assets[] | select(.name | contains ("jar")) | .browser_download_url')\
+      -q -O "$CUSTOM_SERVER"
 
     setfattr -n user.release-date -v "$LATEST_RELEASE_DATE" "$CUSTOM_SERVER"
     chmod +x "$CUSTOM_SERVER"
