@@ -4,11 +4,8 @@
 # Minimum Panel Version: 0.6.0
 # ----------------------------------
 FROM alpine as helper
-ARG KEEPUP_VERSION='3.1.0-alpha.4'
-RUN wget -nv -q -O keepup.zip https://github.com/MineInAbyss/Keepup/releases/download/v${KEEPUP_VERSION}/keepup-${KEEPUP_VERSION}.zip  \
-    # unzip file inside hocon-to-json.zip into /usr/local \
-    && unzip -q keepup.zip \
-    && mv keepup-${KEEPUP_VERSION}/ keepup
+ARG KEEPUP_VERSION='3.1.1'
+RUN wget -nv -q -O keepup https://github.com/MineInAbyss/Keepup/releases/download/v${KEEPUP_VERSION}/keepup
 # Install YourKit Java Profiler agents
 #RUN wget -q https://www.yourkit.com/download/docker/YourKit-JavaProfiler-2023.9-docker.zip -P /tmp/ && \
 #  unzip /tmp/YourKit-JavaProfiler-2023.9-docker.zip -d /usr/local && \
