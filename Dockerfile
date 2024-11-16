@@ -14,7 +14,8 @@ RUN wget -nv -q -O keepup https://github.com/MineInAbyss/Keepup/releases/downloa
 FROM itzg/minecraft-server:java21-graalvm as minecraft
 LABEL org.opencontainers.image.authors="Offz <offz@mineinabyss.com>"
 RUN dnf install -y ansible-core rclone wget unzip jq openssh attr
-COPY --from=helper /keepup /usr/local
+COPY --from=helper /keepup /usr/local/bin
+RUN chmod +x /usr/local/bin/keepup
 ENV\
     KEEPUP=true\
     KEEPUP_ALLOW_OVERRIDES=true\
@@ -43,7 +44,8 @@ FROM itzg/bungeecord as proxy
 LABEL org.opencontainers.image.authors="Offz <offz@mineinabyss.com>"
 RUN apt-get update -y \
  && apt-get install -y rsync rclone wget unzip git pipx python3-venv jq file
-COPY --from=helper /keepup /usr/local
+COPY --from=helper /keepup /usr/local/bin
+RUN chmod +x /usr/local/bin/keepup
 ENV\
     KEEPUP=true\
     KEEPUP_ALLOW_OVERRIDES=true\
