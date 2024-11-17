@@ -62,7 +62,7 @@ ENV\
     SERVER_NAME=dev\
     HOME=/server\
     TYPE=velocity\
-    ANSIBLE_CONFIG=/server-config/ansible.cfg\
+    ANSIBLE_CONFIG=/server-config/ansible.cfg
 
 # Install ansible & collections
 RUN PIPX_HOME=/opt/pipx PIPX_BIN_DIR=/usr/local/bin pipx install ansible-core
