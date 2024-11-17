@@ -1,0 +1,14 @@
+#!/bin/sh
+
+echo [Init] Running scripts as user: $(whoami)
+
+. /scripts/ansible
+. /scripts/keepup
+. /scripts/download_server
+
+# If /start exists
+if [ -f /start ]; then
+  exec /start
+else
+  exec java $JVM_XX_OPTS $JVM_OPTS $expandedDOpts -jar "$(basename "${CUSTOM_SERVER}")" "$@" $EXTRA_ARGS
+fi
