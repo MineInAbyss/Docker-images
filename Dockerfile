@@ -29,7 +29,8 @@ ENV\
     ANSIBLE_CONFIG=/server-config/ansible.cfg\
     LC_ALL=C.UTF-8\
     UID=1000\
-    GID=1000
+    GID=1000\
+    CUSTOM_SERVER=server.jar
 
 # Install ansible collections
 COPY config/ansible-requirements.yml /opt/ansible/requirements.yml
@@ -61,7 +62,7 @@ ENV\
     SERVER_NAME=dev\
     HOME=/server\
     TYPE=velocity\
-    ANSIBLE_CONFIG=/server-config/ansible.cfg
+    ANSIBLE_CONFIG=/server-config/ansible.cfg\
 
 # Install ansible & collections
 RUN PIPX_HOME=/opt/pipx PIPX_BIN_DIR=/usr/local/bin pipx install ansible-core
