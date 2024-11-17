@@ -1,17 +1,27 @@
 #!/bin/sh
-set -e
 
 PREFIX="[Init]"
+
+log_error() {
+  echo "$PREFIX Error: $1" >&2
+  exit 1
+}
 
 if [ "$ANSIBLE" = "true" ]; then
   if [ "$ANSIBLE_PULL" = "true" ]; then
     echo "$PREFIX Pulling and running latest server config ansible playbook"
 
-    ansible-pull -U "https://github.com/MineInAbyss/server-config.git" -d "/server-config" --checkout "${ANSIBLE_PULL_BRANCH:=master}"
+    ansible-pull -U "https://github.com/MineInAbyss/server-config.git" \
+      -d "/server-config" --checkout "${ANSIBLE_PULL_BRANCH:=master}" \
+      || log_error "Failed to pull and run ansible playbook."
   elif [ -f "/server-config/local.yml" ]; then
     echo "$PREFIX Running local server config ansible playbook"
 
-    ansible-playbook /server-config/local.yml --extra-vars "server_name=$SERVER_NAME dest=/data"
+    ansible-playbook /server-config/local.yml \
+      --extra-vars "server_name=$SERVER_NAME dest=/data" \
+      || log_error "Failed to run local ansible playbook."
+  else
+    log_error "No valid ansible playbook found to run."
   fi
 else
   echo "$PREFIX ANSIBLE not set to 'true', not running playbook"

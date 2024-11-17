@@ -8,28 +8,36 @@ pluginsDir=$HOME/plugins
 configSource=/server-config/
 pluginVersionsFile=/server-config/keepup/plugins.conf
 PREFIX="[Init]"
-mkdir -p "$keepupDir"
-mkdir -p "$keepupDownloadsDir"
-mkdir -p "$pluginsDir"
+
+log_error() {
+  echo "$PREFIX Error: $1" >&2
+  exit 1
+}
+
+mkdir -p "$keepupDir" || log_error "Failed to create keepupDir: $keepupDir"
+mkdir -p "$keepupDownloadsDir" || log_error "Failed to create keepupDownloadsDir: $keepupDownloadsDir"
+mkdir -p "$pluginsDir" || log_error "Failed to create pluginsDir: $pluginsDir"
 
 if [ "$KEEPUP" = "true" ]; then
-#    if [ ! -f "$keepupOverridesFile" ]; then
-#      echo "Creating default keepup overrides file"
-#      touch "$keepupOverridesFile"
-#    fi
+  # if [ ! -f "$keepupOverridesFile" ]; then
+  #   echo "Creating default keepup overrides file"
+  #   touch "$keepupOverridesFile" || log_error "Failed to create keepup overrides file."
+  # fi
 
-    if [ ! -f "$pluginVersionsFile" ]; then
-          echo "$PREFIX Plugin versions file not found at $pluginVersionsFile, skipping keepup"
-          return
-    fi
+  if [ ! -f "$pluginVersionsFile" ]; then
+    echo "$PREFIX Plugin versions file not found at $pluginVersionsFile, skipping keepup"
+    exit 0
+  fi
 
-    if [ -z "$KEEPUP_JSON_PATH" ]; then
-      export KEEPUP_JSON_PATH=mineinabyss.servers.${SERVER_NAME}
-    fi
+  if [ -z "$KEEPUP_JSON_PATH" ]; then
+    export KEEPUP_JSON_PATH="mineinabyss.servers.${SERVER_NAME}"
+  fi
 
   echo "$PREFIX Keepup enabled"
-  keepup plugins --hide-progress-bar --ignore-similar $pluginVersionsFile $keepupDownloadsDir $pluginsDir \
-    config --source $configSource --dest $HOME --inventory $keepupDir/keepup-configs.yml --template-cache $keepupDir/templates ${SERVER_NAME}
+
+  keepup plugins --hide-progress-bar --ignore-similar "$pluginVersionsFile" "$keepupDownloadsDir" "$pluginsDir" \
+    config --source "$configSource" --dest "$HOME" --inventory "$keepupDir/keepup-configs.yml" \
+    --template-cache "$keepupDir/templates" "${SERVER_NAME}" || log_error "Keepup command failed."
 else
   echo "$PREFIX KEEPUP is not set to 'true', not running keepup"
 fi
