@@ -3,7 +3,7 @@
 # Environment: Java
 # Minimum Panel Version: 0.6.0
 # ----------------------------------
-FROM alpine as helper
+FROM alpine AS helper
 ARG KEEPUP_VERSION='3.1.1'
 RUN wget -nv -q -O keepup https://github.com/MineInAbyss/Keepup/releases/download/v${KEEPUP_VERSION}/keepup \
     && chmod +x keepup
@@ -11,11 +11,11 @@ RUN wget -nv -q -O keepup https://github.com/MineInAbyss/Keepup/releases/downloa
 #RUN wget -q https://www.yourkit.com/download/docker/YourKit-JavaProfiler-2023.9-docker.zip -P /tmp/ && \
 #  unzip /tmp/YourKit-JavaProfiler-2023.9-docker.zip -d /usr/local && \
 
-FROM container-registry.oracle.com/graalvm/jdk:21-ol9 as minecraft
+FROM container-registry.oracle.com/graalvm/jdk:21-ol9 AS minecraft
 LABEL org.opencontainers.image.authors="Offz <offz@mineinabyss.com>"
 #RUN dnf install -y ansible-core rclone wget unzip jq openssh attr
 RUN microdnf install --refresh -y oracle-epel-release-el9 && \
-    microdnf install -y ansible-core rclone wget unzip jq openssh attr file
+    microdnf install -y git pipx rclone wget unzip jq openssh attr file
 
 COPY --from=helper /keepup /usr/local/bin
 ENV\
@@ -34,6 +34,7 @@ ENV\
 
 # Install ansible collections
 COPY config/ansible-requirements.yml /opt/ansible/requirements.yml
+RUN PIPX_HOME=/opt/pipx PIPX_BIN_DIR=/usr/local/bin pipx install ansible-core
 RUN ansible-galaxy collection install -r /opt/ansible/requirements.yml -p /opt/ansible/collections \
     && rm /opt/ansible/requirements.yml
 
@@ -48,7 +49,7 @@ WORKDIR $HOME
 ENTRYPOINT ["/scripts/entrypoint"]
 
 
-FROM itzg/bungeecord as proxy
+FROM itzg/bungeecord AS proxy
 LABEL org.opencontainers.image.authors="Offz <offz@mineinabyss.com>"
 RUN apt-get update -y \
  && apt-get install -y rsync rclone wget unzip git pipx python3-venv jq file
