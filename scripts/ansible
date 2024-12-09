@@ -7,7 +7,7 @@ if [ "$ANSIBLE" = "true" ]; then
   if [ "$ANSIBLE_PULL" = "true" ]; then
     echo "$PREFIX Pulling and running latest server config ansible playbook"
 
-    ansible-pull -U "https://github.com/MineInAbyss/server-config.git" -d "/server-config" --checkout "${ANSIBLE_PULL_BRANCH:=master}"
+    ansible-pull -U "https://github.com/MineInAbyss/server-config.git" -d "/server-config" --checkout "${ANSIBLE_PULL_BRANCH:=master}" --clean
   elif [ -f "/server-config/local.yml" ]; then
     echo "$PREFIX Running local server config ansible playbook"
 
