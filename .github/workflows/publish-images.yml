@@ -10,7 +10,7 @@ env:
 
 jobs:
   push:
-    name: "Docker push for ${{ matrix.image }}"
+    name: "Docker push for ${{ matrix.target }}"
     runs-on: ubuntu-latest
     permissions:
       contents: read
