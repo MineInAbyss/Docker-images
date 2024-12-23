@@ -30,9 +30,9 @@ if [ "$CUSTOM_SERVER_REPO" ]; then
 
   if [ "$LATEST_RELEASE_DATE" != "$CURRENT_RELEASE_DATE" ]; then
     echo "$PREFIX Downloading new release, release date: $LATEST_RELEASE_DATE"
-    DOWNLOAD_URL=$(echo "$GITHUB_RESPONSE" | jq -r '.assets[] | select(.name | contains ("jar")) | .browser_download_url' 2>/dev/null) \
+    DOWNLOAD_URL=$(echo "$GITHUB_RESPONSE" | jq -r '.assets[] | select(.name | contains ("jar")) | .browser_download_url' | head -n 1) \
       || log_error "Failed to parse download URL."
-    wget "$DOWNLOAD_URL" -q -O "$CUSTOM_SERVER" || log_error "Failed to download server jar."
+    wget "$DOWNLOAD_URL" -nv -O "$CUSTOM_SERVER" || log_error "Failed to download server jar, url $DOWNLOAD_URL, path $CUSTOM_SERVER."
 
     setfattr -n user.release-date -v "$LATEST_RELEASE_DATE" "$CUSTOM_SERVER" || log_error "Failed to set file attribute."
     chmod +x "$CUSTOM_SERVER" || log_error "Failed to set execute permission on server jar."

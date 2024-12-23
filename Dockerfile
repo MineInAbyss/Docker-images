@@ -23,7 +23,7 @@ ENV\
     KEEPUP_ALLOW_OVERRIDES=true\
     ANSIBLE=true\
     ANSIBLE_PULL=true\
-    ANSIBLE_PULL_BRANCH=master\
+    ANSIBLE_PULL_BRANCH=prod\
     SERVER_NAME=dev\
     HOME=/data\
     ANSIBLE_CONFIG=/server-config/ansible.cfg\
@@ -59,7 +59,7 @@ ENV\
     KEEPUP_ALLOW_OVERRIDES=true\
     ANSIBLE=true\
     ANSIBLE_PULL=true\
-    ANSIBLE_PULL_BRANCH=master\
+    ANSIBLE_PULL_BRANCH=prod\
     SERVER_NAME=dev\
     HOME=/server\
     TYPE=velocity\
