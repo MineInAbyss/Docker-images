@@ -49,7 +49,7 @@ WORKDIR $HOME
 ENTRYPOINT ["/scripts/entrypoint"]
 
 
-FROM itzg/bungeecord AS proxy
+FROM itzg/mc-proxy AS proxy
 LABEL org.opencontainers.image.authors="Offz <offz@mineinabyss.com>"
 RUN apt-get update -y \
  && apt-get install -y rsync rclone wget unzip git pipx python3-venv jq file
@@ -63,7 +63,9 @@ ENV\
     SERVER_NAME=dev\
     HOME=/server\
     TYPE=velocity\
-    ANSIBLE_CONFIG=/server-config/ansible.cfg
+    ANSIBLE_CONFIG=/server-config/ansible.cfg\
+    UID=1000\
+    GID=1000
 
 # Install ansible & collections
 RUN PIPX_HOME=/opt/pipx PIPX_BIN_DIR=/usr/local/bin pipx install ansible-core
@@ -76,5 +78,11 @@ COPY scripts /scripts
 RUN chmod +x /scripts/*
 
 WORKDIR $HOME
+
+# Rename bungeecord user to minecraft for consistency
+RUN usermod --login minecraft bungeecord && groupmod --new-name minecraft bungeecord
+# Set base permissions for when no volume is mounted
+RUN chown -R minecraft:minecraft $HOME && mkdir -p /server-config && chown -R minecraft:minecraft /server-config
+
 RUN cp /usr/bin/run-bungeecord.sh /start
 ENTRYPOINT ["/scripts/entrypoint"]

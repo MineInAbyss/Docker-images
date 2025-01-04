@@ -6,9 +6,9 @@ usermod -u $UID minecraft
 groupmod -o -g "$GID" minecraft
 
 if [ "$UPDATE_DATA_OWNER" = "true" ]; then
-  echo "[Init] Updating owner for /data and /server-config to $UID:$GID"
-  chown $UID:$GID -R /data
-  chown $UID:$GID -R /server-config
+  echo "[Init] Updating owner for $HOME and /server-config to $UID:$GID"
+  chown $UID:$GID -R $HOME
+  [ -d /server-config ] && chown $UID:$GID -R /server-config
 fi
 
 exec setpriv --reuid $UID --regid $GID --init-groups --inh-caps=-all /scripts/rootless
