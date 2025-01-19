@@ -1,11 +1,6 @@
 #!/bin/sh
 
-PREFIX="[Init]"
-
-log_error() {
-  echo "$PREFIX Error: $1" >&2
-  exit 1
-}
+. /scripts/helpers
 
 if [ "$CUSTOM_SERVER_REPO" ]; then
   [ ! "$CUSTOM_SERVER" ] && export CUSTOM_SERVER=./server.jar

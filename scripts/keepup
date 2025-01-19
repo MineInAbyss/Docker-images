@@ -1,18 +1,14 @@
 #!/bin/sh
 set -e
 
+. /scripts/helpers
+
 keepupDir=$HOME/keepupDir
 keepupDownloadsDir=$keepupDir/downloads
 #keepupOverridesFile=$keepupDir/overrides.conf
 pluginsDir=$HOME/plugins
 configSource=/server-config/
 pluginVersionsFile=/server-config/keepup/plugins.conf
-PREFIX="[Init]"
-
-log_error() {
-  echo "$PREFIX Error: $1" >&2
-  exit 1
-}
 
 mkdir -p "$keepupDir" || log_error "Failed to create keepupDir: $keepupDir"
 mkdir -p "$keepupDownloadsDir" || log_error "Failed to create keepupDownloadsDir: $keepupDownloadsDir"

@@ -19,5 +19,5 @@ fi
 if [ -f /start ]; then
   exec /start
 else
-exec java -Xms${MEMORY} -Xmx${MEMORY} $JVM_XX_OPTS $JVM_OPTS $expandedDOpts -jar "$(basename "${CUSTOM_SERVER}")" "$@" $EXTRA_ARGS
+exec java -Xms"${MEMORY}" -Xmx"${MEMORY}" "$JVM_XX_OPTS" "$JVM_OPTS" "$expandedDOpts" -jar "$(basename "${CUSTOM_SERVER}")" "$@" "$EXTRA_ARGS"
 fi

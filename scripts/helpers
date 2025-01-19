@@ -1,0 +1,8 @@
+#!/bin/bash
+
+PREFIX="[Init]"
+
+log_error() {
+  echo "$PREFIX Error: $1" >&2
+  exit 1
+}

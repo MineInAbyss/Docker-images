@@ -14,7 +14,7 @@ RUN wget -nv -q -O keepup https://github.com/MineInAbyss/Keepup/releases/downloa
 FROM container-registry.oracle.com/graalvm/jdk:21-ol9 AS minecraft
 LABEL org.opencontainers.image.authors="Offz <offz@mineinabyss.com>"
 #RUN dnf install -y ansible-core rclone wget unzip jq openssh attr
-RUN microdnf install --refresh -y oracle-epel-release-el9 && \
+RUN microdnf install -y oracle-epel-release-el9 && \
     microdnf install -y git pipx rclone wget unzip jq openssh attr file
 
 COPY --from=helper /keepup /usr/local/bin
