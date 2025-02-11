@@ -1,0 +1,8 @@
+#!/bin/bash
+
+keepupDir=$HOME/keepupDir
+keepupDownloadsDir=$keepupDir/downloads
+#keepupOverridesFile=$keepupDir/overrides.conf
+pluginsDir=$HOME/plugins
+configSource=/server-config/
+pluginVersionsFile=/server-config/keepup/plugins.conf

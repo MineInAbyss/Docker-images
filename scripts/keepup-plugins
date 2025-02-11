@@ -1,0 +1,7 @@
+#!/bin/sh
+
+. /scripts/helpers
+. /scripts/keepup-helpers
+
+keepup plugins --hide-progress-bar --ignore-similar "$pluginVersionsFile" "$keepupDownloadsDir" "$pluginsDir"\
+  || log_error "Keepup plugin pull failed."
