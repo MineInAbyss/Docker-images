@@ -3,5 +3,5 @@
 . /scripts/helpers
 . /scripts/keepup-helpers
 
-keepup config --source "$configSource" --dest "$HOME" --inventory "$keepupDir/keepup-configs.yml" \
+keepup config --source "$configSource" --dest "$HOME" --inventory "$inventoryFile" \
     --template-cache "$keepupDir/templates" "${SERVER_NAME}" || log_error "Keepup config copy failed."
