@@ -4,7 +4,7 @@
 # Minimum Panel Version: 0.6.0
 # ----------------------------------
 FROM alpine AS helper
-ARG KEEPUP_VERSION='3.2.0-alpha.4'
+ARG KEEPUP_VERSION='3.2.0-alpha.5'
 RUN wget -nv -q -O keepup https://github.com/MineInAbyss/Keepup/releases/download/v${KEEPUP_VERSION}/keepup \
     && chmod +x keepup
 # Install YourKit Java Profiler agents
