@@ -11,7 +11,7 @@ RUN wget -nv -q -O keepup https://github.com/MineInAbyss/Keepup/releases/downloa
 #RUN wget -q https://www.yourkit.com/download/docker/YourKit-JavaProfiler-2023.9-docker.zip -P /tmp/ && \
 #  unzip /tmp/YourKit-JavaProfiler-2023.9-docker.zip -d /usr/local && \
 
-FROM container-registry.oracle.com/graalvm/jdk:23 AS minecraft
+FROM container-registry.oracle.com/graalvm/jdk:24 AS minecraft
 LABEL org.opencontainers.image.authors="Offz <offz@mineinabyss.com>"
 #RUN dnf install -y ansible-core rclone wget unzip jq openssh attr
 RUN microdnf install -y oracle-epel-release-el9 && \
