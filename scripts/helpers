@@ -6,3 +6,7 @@ log_error() {
   echo "$PREFIX Error: $1" >&2
   exit 1
 }
+
+log_info() {
+  echo "$PREFIX Info: $1"
+}

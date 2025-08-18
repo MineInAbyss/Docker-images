@@ -1,0 +1,84 @@
+#!/bin/bash
+
+. /scripts/helpers
+
+#
+# Ensures a Git repository exists at a specified destination, checked out
+# to the latest version of a given branch. It can handle both public and
+# private repositories.
+#
+# Usage:
+#   pull_config_repo <repo_url> <destination_path> <branch>
+#
+# @param {string} repo          - The URL of the Git repository (e.g., git@github.com:user/repo.git).
+# @param {string} destination   - The local filesystem path to clone/update the repository.
+# @param {string} branch        - The name of the branch to check out and pull.
+#
+pull_config_repo() {
+    # --- Argument Validation ---
+    if [[ $# -lt 2 || $# -gt 3 ]]; then
+        echo "Error: Invalid number of arguments." >&2
+        echo "Usage: ensure_repo <repo_url> <destination_path> <branch>" >&2
+        return 1
+    fi
+
+    local repo="$1"
+    local destination="$2"
+    local branch="$3"
+
+    # --- Main Logic ---
+    if [ "$branch" == "none" ]; then
+        echo "Skipping repository '${repo#*@}' as branch is set to 'none'"
+        return 0
+    fi
+    echo "Syncing repository '${repo#*@}' to '$destination' on branch '$branch'..."
+
+    # Use a subshell for directory changes to avoid affecting the caller's environment.
+    (
+        # To prevent scripts from continuing on error.
+        set -e
+
+        if [ -d "$destination/.git" ]; then
+            # --- Destination exists and is a Git repository: Update it ---
+            echo "Repository found at '$destination'. Fetching latest changes..."
+            cd "$destination"
+
+            # Check if the remote URL matches.
+            local current_remote
+            current_remote=$(git config --get remote.origin.url)
+            if [[ "$current_remote" != "$repo" ]]; then
+                echo "Warning: Remote URL mismatch. Updating remote 'origin' to '$repo'."
+                git remote set-url origin "$repo"
+            fi
+
+            # Fetch latest data from the remote and switch to desired branch.
+            git fetch --quiet origin
+            git checkout "$branch"
+            git pull --quiet origin "$branch"
+
+        else
+            # --- Destination does not exist or is not a Git repo: Clone it ---
+            echo "Cloning repository into '$destination'..."
+            git clone --branch "$branch" "$repo" "$destination"
+        fi
+    )
+
+    # Capture the exit status of the subshell.
+    local status=$?
+    if [[ $status -eq 0 ]]; then
+        echo "Successfully synced repository."
+    else
+        echo "An error occurred during repository synchronization." >&2
+    fi
+
+    return $status
+}
+
+# Pull public repos
+pull_config_repo "https://github.com/MineInAbyss/server-config.git" "/configs/server-config" "${CONFIGS_BRANCH_SERVER:-${CONFIGS_BRANCH:-master}}"
+
+# Pull private repos with a GitHub PAT
+if [ -n "$GITHUB_PAT" ]; then
+    pull_config_repo "https://$GITHUB_PAT@github.com/MineInAbyss/server-config-private.git" "/configs/server-config-private" "${CONFIGS_BRANCH_PRIVATE:-${CONFIGS_BRANCH:-master}}"
+    pull_config_repo "https://$GITHUB_PAT@github.com/MineInAbyss/BBModel-Files.git" "/configs/BBModels" "${CONFIGS_BRANCH_BBMODELS:-${CONFIGS_BRANCH:-master}}"
+fi

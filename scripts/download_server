@@ -2,11 +2,11 @@
 
 . /scripts/helpers
 
-if [ "$CUSTOM_SERVER_REPO" ]; then
-  [ ! "$CUSTOM_SERVER" ] && export CUSTOM_SERVER=./server.jar
-  [ ! "$CUSTOM_SERVER_TAG" ] && export CUSTOM_SERVER_TAG=latest
+if [ "$SERVER_REPO" ]; then
+  [ ! "$SERVER_JAR" ] && export SERVER_JAR=./server.jar
+  [ ! "$VERSION" ] && export VERSION=latest
 
-  echo "$PREFIX Checking for server updates from $CUSTOM_SERVER_REPO"
+  echo "$PREFIX Checking for server updates from $SERVER_REPO"
 
   if [ "$KEEPUP_GITHUB_AUTH_TOKEN" ]; then
     AUTHORIZATION="--header 'authorization: Bearer $KEEPUP_GITHUB_AUTH_TOKEN'"
@@ -14,11 +14,11 @@ if [ "$CUSTOM_SERVER_REPO" ]; then
     AUTHORIZATION=""
   fi
 
-  GITHUB_API="https://api.github.com/repos/$CUSTOM_SERVER_REPO/releases/$CUSTOM_SERVER_TAG"
+  GITHUB_API="https://api.github.com/repos/$SERVER_REPO/releases/$VERSION"
   GITHUB_RESPONSE=$(curl $AUTHORIZATION -s "$GITHUB_API") || log_error "Failed to fetch GitHub API response."
 
   LATEST_RELEASE_DATE=$(echo "$GITHUB_RESPONSE" | jq -r '.published_at' 2>/dev/null) || log_error "Failed to parse latest release date."
-  CURRENT_RELEASE_DATE=$(getfattr --only-values -n user.release-date "$CUSTOM_SERVER" 2>/dev/null || echo "none")
+  CURRENT_RELEASE_DATE=$(getfattr --only-values -n user.release-date "$SERVER_JAR" 2>/dev/null || echo "none")
 
   echo "$PREFIX Latest release date: $LATEST_RELEASE_DATE"
   echo "$PREFIX Current release date: $CURRENT_RELEASE_DATE"
@@ -27,10 +27,10 @@ if [ "$CUSTOM_SERVER_REPO" ]; then
     echo "$PREFIX Downloading new release, release date: $LATEST_RELEASE_DATE"
     DOWNLOAD_URL=$(echo "$GITHUB_RESPONSE" | jq -r '.assets[] | select(.name | contains ("jar")) | .browser_download_url' | head -n 1) \
       || log_error "Failed to parse download URL."
-    wget "$DOWNLOAD_URL" -nv -O "$CUSTOM_SERVER" || log_error "Failed to download server jar, url $DOWNLOAD_URL, path $CUSTOM_SERVER."
+    wget "$DOWNLOAD_URL" -nv -O "$SERVER_JAR" || log_error "Failed to download server jar, url $DOWNLOAD_URL, path $SERVER_JAR."
 
-    setfattr -n user.release-date -v "$LATEST_RELEASE_DATE" "$CUSTOM_SERVER" || log_error "Failed to set file attribute."
-    chmod +x "$CUSTOM_SERVER" || log_error "Failed to set execute permission on server jar."
+    setfattr -n user.release-date -v "$LATEST_RELEASE_DATE" "$SERVER_JAR" || log_error "Failed to set file attribute."
+    chmod +x "$SERVER_JAR" || log_error "Failed to set execute permission on server jar."
   else
     echo "$PREFIX Server is up to date"
   fi

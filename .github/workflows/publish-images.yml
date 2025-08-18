@@ -21,8 +21,6 @@ jobs:
         include:
           - target: minecraft
             platforms: linux/amd64,linux/arm64
-          - target: proxy
-            platforms: linux/amd64
     steps:
       - uses: actions/checkout@v4
 
