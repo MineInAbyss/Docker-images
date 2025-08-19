@@ -75,10 +75,10 @@ pull_config_repo() {
 }
 
 # Pull public repos
-pull_config_repo "https://github.com/MineInAbyss/server-config.git" "/configs/server-config" "${CONFIGS_BRANCH_SERVER:-${CONFIGS_BRANCH:-master}}"
+pull_config_repo "https://github.com/MineInAbyss/server-config.git" "/configs/server-config" "${CONFIGS_BRANCH_SERVER:-${CONFIGS_BRANCH}}"
 
 # Pull private repos with a GitHub PAT
 if [ -n "$GITHUB_PAT" ]; then
-    pull_config_repo "https://$GITHUB_PAT@github.com/MineInAbyss/server-config-private.git" "/configs/server-config-private" "${CONFIGS_BRANCH_PRIVATE:-${CONFIGS_BRANCH:-master}}"
-    pull_config_repo "https://$GITHUB_PAT@github.com/MineInAbyss/BBModel-Files.git" "/configs/BBModels" "${CONFIGS_BRANCH_BBMODELS:-${CONFIGS_BRANCH:-master}}"
+    pull_config_repo "https://$GITHUB_PAT@github.com/MineInAbyss/server-config-private.git" "/configs/server-config-private" "${CONFIGS_BRANCH_PRIVATE:-${CONFIGS_BRANCH}}"
+    pull_config_repo "https://$GITHUB_PAT@github.com/MineInAbyss/BBModel-Files.git" "/configs/BBModels" "${CONFIGS_BRANCH_BBMODELS:-${CONFIGS_BRANCH}}"
 fi

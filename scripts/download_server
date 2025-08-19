@@ -3,9 +3,6 @@
 . /scripts/helpers
 
 if [ "$SERVER_REPO" ]; then
-  [ ! "$SERVER_JAR" ] && export SERVER_JAR=./server.jar
-  [ ! "$VERSION" ] && export VERSION=latest
-
   echo "$PREFIX Checking for server updates from $SERVER_REPO"
 
   if [ "$KEEPUP_GITHUB_AUTH_TOKEN" ]; then
