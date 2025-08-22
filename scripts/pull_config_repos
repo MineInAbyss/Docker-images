@@ -54,6 +54,7 @@ pull_config_repo() {
             # Fetch latest data from the remote and switch to desired branch.
             git fetch --quiet origin
             git checkout "$branch"
+            git stash --quiet
             git pull --quiet origin "$branch"
 
         else
