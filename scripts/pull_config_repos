@@ -28,10 +28,10 @@ pull_config_repo() {
 
     # --- Main Logic ---
     if [ "$branch" == "none" ]; then
-        echo "Skipping repository '${repo#*@}' as branch is set to 'none'"
+        log_info "Skipping repository '${repo#*@}' as branch is set to 'none'"
         return 0
     fi
-    echo "Syncing repository '${repo#*@}' to '$destination' on branch '$branch'..."
+    log_info "Syncing repository '${repo#*@}' to '$destination' on branch '$branch'..."
 
     # Use a subshell for directory changes to avoid affecting the caller's environment.
     (
@@ -40,14 +40,14 @@ pull_config_repo() {
 
         if [ -d "$destination/.git" ]; then
             # --- Destination exists and is a Git repository: Update it ---
-            echo "Repository found at '$destination'. Fetching latest changes..."
+            log_info "Repository found at '$destination'. Fetching latest changes..."
             cd "$destination"
 
             # Check if the remote URL matches.
             local current_remote
             current_remote=$(git config --get remote.origin.url)
             if [[ "$current_remote" != "$repo" ]]; then
-                echo "Warning: Remote URL mismatch. Updating remote 'origin' to '$repo'."
+                log_warning "Remote URL mismatch. Updating remote 'origin' to '$repo'."
                 git remote set-url origin "$repo"
             fi
 
@@ -59,7 +59,7 @@ pull_config_repo() {
 
         else
             # --- Destination does not exist or is not a Git repo: Clone it ---
-            echo "Cloning repository into '$destination'..."
+            log_info "Cloning repository into '$destination'..."
             git clone --branch "$branch" "$repo" "$destination"
         fi
     )
@@ -67,9 +67,9 @@ pull_config_repo() {
     # Capture the exit status of the subshell.
     local status=$?
     if [[ $status -eq 0 ]]; then
-        echo "Successfully synced repository."
+        log_info "Successfully synced repository."
     else
-        echo "An error occurred during repository synchronization." >&2
+        log_error "An error occurred during repository synchronization."
     fi
 
     return $status
@@ -82,4 +82,5 @@ pull_config_repo "https://github.com/MineInAbyss/server-config.git" "/configs/se
 if [ -n "$GITHUB_PAT" ]; then
     pull_config_repo "https://$GITHUB_PAT@github.com/MineInAbyss/server-config-private.git" "/configs/server-config-private" "${CONFIGS_BRANCH_PRIVATE:-${CONFIGS_BRANCH}}"
     pull_config_repo "https://$GITHUB_PAT@github.com/MineInAbyss/BBModel-Files.git" "/configs/BBModels" "${CONFIGS_BRANCH_BBMODELS:-${CONFIGS_BRANCH}}"
+    ln -sf "/configs/BBModels/blueprints" "/data/plugins/ModelEngine" || log_error "Failed to copy BBModels, ensure that plugins/ModelEngine/blueprints does not exist"
 fi
