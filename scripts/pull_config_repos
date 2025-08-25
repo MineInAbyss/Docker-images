@@ -82,5 +82,8 @@ pull_config_repo "https://github.com/MineInAbyss/server-config.git" "/configs/se
 if [ -n "$GITHUB_PAT" ]; then
     pull_config_repo "https://$GITHUB_PAT@github.com/MineInAbyss/server-config-private.git" "/configs/server-config-private" "${CONFIGS_BRANCH_PRIVATE:-${CONFIGS_BRANCH}}"
     pull_config_repo "https://$GITHUB_PAT@github.com/MineInAbyss/BBModel-Files.git" "/configs/BBModels" "${CONFIGS_BRANCH_BBMODELS:-${CONFIGS_BRANCH}}"
-    ln -sf "/configs/BBModels/blueprints" "/data/plugins/ModelEngine" || log_error "Failed to copy BBModels, ensure that plugins/ModelEngine/blueprints does not exist"
+
+    if [ "${CONFIGS_BRANCH_BBMODELS:-${CONFIGS_BRANCH}}" != "none" ]; then
+      ln -sf "/configs/BBModels/blueprints" "/data/plugins/ModelEngine" || log_error "Failed to copy BBModels, ensure that plugins/ModelEngine/blueprints does not exist"
+    fi
 fi
