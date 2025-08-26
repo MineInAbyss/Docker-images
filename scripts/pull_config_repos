@@ -55,7 +55,8 @@ pull_config_repo() {
             git fetch --quiet origin
             git checkout "$branch"
             git stash --quiet
-            git pull --quiet origin "$branch"
+            # Switch to latest commit from origin (like a pull, but drops local commits on conflict)
+            git reset --hard @{upstream}
 
         else
             # --- Destination does not exist or is not a Git repo: Clone it ---
