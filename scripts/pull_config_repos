@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 . /scripts/helpers
 
@@ -76,15 +76,22 @@ pull_config_repo() {
     return $status
 }
 
+# Gets branch from mineinabyss.json config by name, or default in said config, or passed env variable, or finally CONFIGS_BRANCH
+get_branch() {
+  DEFAULT=${2:-${CONFIGS_BRANCH}}
+  jq --arg config "$1" --arg default "$DEFAULT" -r '.configs[$config] // .configs.default // $default' "$HOME/config/mineinabyss.json" 2>/dev/null || echo "$DEFAULT"
+}
+
 # Pull public repos
-pull_config_repo "https://github.com/MineInAbyss/server-config.git" "/configs/server-config" "${CONFIGS_BRANCH_SERVER:-${CONFIGS_BRANCH}}"
+pull_config_repo "https://github.com/MineInAbyss/server-config.git" "/configs/server-config" "$(get_branch "server-config" "$CONFIGS_BRANCH_SERVER")"
 
 # Pull private repos with a GitHub PAT
 if [ -n "$GITHUB_PAT" ]; then
-    pull_config_repo "https://$GITHUB_PAT@github.com/MineInAbyss/server-config-private.git" "/configs/server-config-private" "${CONFIGS_BRANCH_PRIVATE:-${CONFIGS_BRANCH}}"
-    pull_config_repo "https://$GITHUB_PAT@github.com/MineInAbyss/BBModel-Files.git" "/configs/BBModels" "${CONFIGS_BRANCH_BBMODELS:-${CONFIGS_BRANCH}}"
+    pull_config_repo "https://$GITHUB_PAT@github.com/MineInAbyss/server-config-private.git" "/configs/server-config-private" "$(get_branch "server-config-private" "$CONFIGS_BRANCH_PRIVATE")"
+    BBMODELS_BRANCH=$(get_branch "bbmodels" "$CONFIGS_BRANCH_BBMODELS")
+    pull_config_repo "https://$GITHUB_PAT@github.com/MineInAbyss/BBModel-Files.git" "/configs/BBModels" "$BBMODELS_BRANCH"
 
-    if [ "${CONFIGS_BRANCH_BBMODELS:-${CONFIGS_BRANCH}}" != "none" ]; then
+    if [ "$BBMODELS_BRANCH" != "none" ]; then
       ln -sf "/configs/BBModels/blueprints" "/data/plugins/ModelEngine" || log_error "Failed to copy BBModels, ensure that plugins/ModelEngine/blueprints does not exist"
     fi
 fi

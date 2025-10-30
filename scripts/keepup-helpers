@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 keepupDir=$HOME/keepupDir
 keepupDownloadsDir=$keepupDir/downloads

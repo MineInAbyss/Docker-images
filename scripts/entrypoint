@@ -1,9 +1,9 @@
-#!/bin/bash
+#!/bin/sh
 
-set -e
+set -euo pipefail
 
-usermod -u $UID minecraft
-groupmod -o -g "$GID" minecraft
+addgroup -S -g "$GID" minecraft
+adduser -S -h /data -u "$UID" -s /bin/false -G minecraft minecraft
 
 if [ "$UPDATE_DATA_OWNER" = "true" ]; then
   echo "[Init] Updating owner for $HOME and /configs to $UID:$GID"

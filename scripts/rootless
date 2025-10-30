@@ -9,7 +9,7 @@ if [ "$CONFIGS_PULL" = "true" ]; then
 fi
 . /scripts/keepup
 
-if [ "$DEV_REMOTE_DEBUG" = "true" ]; then
+if [ "$JVM_REMOTE_DEBUG" = "true" ]; then
   JVM_OPTS="$JVM_OPTS -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
 fi
 
@@ -22,5 +22,5 @@ fi
 if [ -f /start ]; then
   exec /start
 else
-  exec java -Xms${MEMORY} -Xmx${MEMORY} $JVM_XX_OPTS $JVM_OPTS $expandedDOpts -jar "$(basename "${SERVER_JAR}")" "$@" $EXTRA_ARGS
+  exec java -Xms${MEMORY} -Xmx${MEMORY} $JVM_XX_OPTS $JVM_OPTS -jar "$(basename "${SERVER_JAR}")" "$@" $EXTRA_ARGS
 fi
