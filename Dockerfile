@@ -10,10 +10,10 @@ RUN mkdir /binaries && \
     wget -nv -q -O /binaries/keepup https://github.com/MineInAbyss/Keepup/releases/download/v${KEEPUP_VERSION}/keepup && \
     chmod +x /binaries/keepup
 
-FROM azul/zulu-openjdk-alpine:25-jre as minecraft
+FROM azul/zulu-openjdk:25-jre as minecraft
 LABEL org.opencontainers.image.authors="Offz <offz@mineinabyss.com>"
 
-RUN apk add --no-cache wget unzip jq attr file rclone util-linux git gcompat
+RUN apt-get update && apt-get install wget unzip jq attr file rclone git -y
 
 # Copy extra binaries
 COPY --from=helper /binaries /usr/local/bin
@@ -41,7 +41,9 @@ ENV\
 # Copy over scripts
 COPY scripts /scripts
 
-RUN chmod +x -R /scripts && \
+RUN groupadd --gid 1000 minecraft && \
+    useradd --system --shell /bin/false --uid 1000 -g minecraft --home /data minecraft &&\
+    chmod +x -R /scripts && \
     mkdir /configs && \
     ln -sf /scripts/pull_config_repos /scripts/ansible
 # (mineinabyss plugin hard-codes /scripts/ansible currently, remove this line when it's updated)
