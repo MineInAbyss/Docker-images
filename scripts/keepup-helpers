@@ -5,5 +5,5 @@ keepupDownloadsDir=$keepupDir/downloads
 #keepupOverridesFile=$keepupDir/overrides.conf
 pluginsDir=$HOME/plugins
 configSource=/configs/server-config/
-pluginVersionsFile=/configs/server-config/.servers/plugins.conf
-inventoryFile=/configs/server-config/.servers/configs.yml
+pluginVersionsFile=/configs/server-config/keepup/plugins.conf
+inventoryFile=/configs/server-config/keepup/configs.yml
