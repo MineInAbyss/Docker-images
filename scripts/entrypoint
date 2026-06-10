@@ -1,14 +1,47 @@
 #!/bin/bash
 
-set -euo pipefail
+set -eo pipefail
 
-usermod -u $UID minecraft
-groupmod -o -g "$GID" minecraft
+# If running as root, perform setup and drop privileges
+if [ "$(id -u)" = "0" ]; then
+    echo "[Init] Running as root, dropping down privileges..."
 
-if [ "$UPDATE_DATA_OWNER" = "true" ]; then
-  echo "[Init] Updating owner for $HOME and /configs to $UID:$GID"
-  chown $UID:$GID -R $HOME
-  [ -d /configs ] && chown $UID:$GID -R /configs
+    # Change UID/GID of minecraft user if specified
+    if [ -n "${UID:-}" ] && [ -n "${GID:-}" ]; then
+        if [ "$(id -u minecraft 2>/dev/null)" != "$UID" ] || [ "$(id -g minecraft 2>/dev/null)" != "$GID" ]; then
+            echo "[Init] Changing minecraft user's UID to $UID and GID to $GID"
+            groupmod -o -g "$GID" minecraft || true
+            usermod -o -u "$UID" minecraft || true
+        fi
+    else
+        UID=$(id -u minecraft)
+        GID=$(id -g minecraft)
+    fi
+
+    echo "[Init] Dropping privileges to user $UID:$GID"
+    exec setpriv --reuid $UID --regid $GID --init-groups --inh-caps=-all "$0" "$@"
 fi
 
-exec setpriv --reuid $UID --regid $GID --init-groups --inh-caps=-all /scripts/rootless
+echo "[Init] Running scripts as user: $(whoami)"
+
+. /scripts/download_server
+if [ "$CONFIGS_PULL" = "true" ]; then
+  . /scripts/pull_config_repos
+fi
+. /scripts/keepup
+
+if [ "$JVM_REMOTE_DEBUG" = "true" ]; then
+  JVM_OPTS="$JVM_OPTS -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+fi
+
+# Accept EULA if env variable set
+if [ "$EULA" = "true" ] && ! grep -q "eula=true" eula.txt; then
+  echo "eula=true" > eula.txt
+fi
+
+# If /start exists
+if [ -f /start ]; then
+  exec /start
+else
+  exec java -Xms${MEMORY} -Xmx${MEMORY} $JVM_XX_OPTS $JVM_OPTS -jar "$(basename "${SERVER_JAR}")" "$@" $EXTRA_ARGS
+fi

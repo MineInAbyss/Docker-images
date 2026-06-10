@@ -10,7 +10,7 @@ RUN mkdir /binaries && \
     wget -nv -q -O /binaries/keepup https://github.com/MineInAbyss/Keepup/releases/download/v${KEEPUP_VERSION}/keepup && \
     chmod +x /binaries/keepup
 
-FROM azul/zulu-openjdk:25-jre as minecraft
+FROM docker.io/azul/zulu-openjdk:25-jre as minecraft
 LABEL org.opencontainers.image.authors="Offz <offz@mineinabyss.com>"
 
 RUN apt-get update && apt-get install wget unzip jq attr file rclone git -y
