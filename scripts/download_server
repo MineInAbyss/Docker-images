@@ -5,14 +5,13 @@
 if [ "$SERVER_REPO" ]; then
   echo "$PREFIX Checking for server updates from $SERVER_REPO"
 
+  AUTHORIZATION=()
   if [ "$KEEPUP_GITHUB_AUTH_TOKEN" ]; then
-    AUTHORIZATION="--header 'authorization: Bearer $KEEPUP_GITHUB_AUTH_TOKEN'"
-  else
-    AUTHORIZATION=""
+    AUTHORIZATION=(--header "authorization: Bearer $KEEPUP_GITHUB_AUTH_TOKEN")
   fi
 
   GITHUB_API="https://api.github.com/repos/$SERVER_REPO/releases/$VERSION"
-  GITHUB_RESPONSE=$(curl $AUTHORIZATION -s "$GITHUB_API") || log_error "Failed to fetch GitHub API response."
+  GITHUB_RESPONSE=$(wget -q -O - "${AUTHORIZATION[@]}" "$GITHUB_API") || log_error "Failed to fetch GitHub API response."
 
   LATEST_RELEASE_DATE=$(echo "$GITHUB_RESPONSE" | jq -r '.published_at' 2>/dev/null) || log_error "Failed to parse latest release date."
   CURRENT_RELEASE_DATE=$(getfattr --only-values -n user.release-date "$SERVER_JAR" 2>/dev/null || echo "none")
